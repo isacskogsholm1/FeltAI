@@ -20,13 +20,13 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 .card { background: #fff; border: 1px solid #e5e3de; border-radius: 14px; padding: 18px; margin-bottom: 14px; }
 .card-title { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 14px; }
 .status-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #f0eeea; border-radius: 10px; margin-bottom: 14px; font-size: 13px; color: #666; }
-.sdot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
+.sdot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; flex-shrink: 0; transition: background .3s; }
 .sdot.listening { background: #D85A30; animation: blink .8s infinite; }
 .sdot.processing { background: #BA7517; animation: blink .5s infinite; }
 .sdot.done { background: #1D9E75; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 .mic-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 16px 0; }
-#micBtn { width: 88px; height: 88px; border-radius: 50%; background: #1D9E75; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+#micBtn { width: 88px; height: 88px; border-radius: 50%; background: #1D9E75; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; transition: transform .1s; }
 #micBtn:active { transform: scale(.94); }
 #micBtn.on { background: #D85A30; animation: pulse 1.4s infinite; }
 #micBtn:disabled { background: #ccc; }
@@ -38,15 +38,17 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 .hint { color: #bbb; font-style: italic; font-size: 14px; }
 .interim { color: #aaa; }
 .wc { position: absolute; bottom: 8px; right: 12px; font-size: 11px; color: #ccc; }
-.ai-card { display: none; margin-top: 12px; background: #e8f8f1; border: 1px solid #9FE1CB; border-radius: 10px; padding: 16px; }
-.ai-card.show { display: block; }
-.ai-badge { font-size: 11px; font-weight: 700; color: #085041; background: #9FE1CB; padding: 2px 8px; border-radius: 4px; }
-.ai-summary { font-size: 14px; color: #0F6E56; margin: 10px 0 14px; line-height: 1.6; }
-.ai-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
-.ai-field { background: #fff; border-radius: 8px; padding: 8px 10px; font-size: 12px; border: 1px solid #c8eedd; }
-.ai-field-label { color: #888; margin-bottom: 2px; }
-.ai-field-val { font-weight: 600; color: #0F6E56; font-size: 13px; }
-.ai-actions { display: flex; gap: 8px; }
+.result-card { display: none; margin-top: 12px; border-radius: 10px; overflow: hidden; border: 1px solid #9FE1CB; }
+.result-card.show { display: block; }
+.result-header { background: #e8f8f1; padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
+.result-badge { font-size: 11px; font-weight: 700; color: #085041; background: #9FE1CB; padding: 2px 8px; border-radius: 4px; }
+.result-summary { font-size: 14px; color: #0F6E56; font-weight: 500; flex: 1; line-height: 1.4; }
+.result-body { background: #fff; padding: 14px 16px; }
+.result-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
+.rf { background: #f8f7f4; border-radius: 8px; padding: 8px 10px; }
+.rf-label { font-size: 11px; color: #999; margin-bottom: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.rf-val { font-weight: 600; color: #1D9E75; font-size: 14px; }
+.result-actions { display: flex; gap: 8px; }
 .btn-use { flex:1; background: #1D9E75; color: #fff; border: none; border-radius: 8px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; }
 .btn-skip { background: transparent; color: #888; border: 1px solid #d0cec8; border-radius: 8px; padding: 11px 16px; font-size: 14px; cursor: pointer; }
 .alert-card { display: none; background: #fff3f0; border: 1px solid #ffb8a8; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
@@ -55,7 +57,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 .alert-body { font-size: 13px; color: #843a31; line-height: 1.5; }
 .hrow { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
 .hrow::-webkit-scrollbar { display: none; }
-.hchip { white-space: nowrap; font-size: 12px; padding: 5px 12px; border-radius: 20px; background: #f0eeea; border: 1px solid #e5e3de; color: #555; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.hchip { white-space: nowrap; font-size: 12px; padding: 5px 12px; border-radius: 20px; background: #f0eeea; border: 1px solid #e5e3de; color: #555; cursor: pointer; flex-shrink: 0; }
 .manual-area { width: 100%; background: transparent; border: none; outline: none; font-size: 15px; font-family: inherit; color: #1a1a18; resize: none; min-height: 80px; line-height: 1.6; }
 .btn-analyze { margin-top: 10px; width: 100%; padding: 13px; background: #1D9E75; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -69,10 +71,9 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag { font-size: 13px; padding: 7px 14px; border-radius: 20px; border: 1px solid #d0cec8; background: #f0eeea; color: #555; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
 .tag.on { background: #1D9E75; color: #fff; border-color: #1D9E75; }
-.tag.warn { border-color: #F0997B; }
 .tag.warn.on { background: #D85A30; border-color: #D85A30; }
 .sev-row { display: flex; gap: 8px; grid-column: 1/-1; }
-.sev-btn { flex:1; padding: 8px; border-radius: 8px; border: 1px solid #e5e3de; background: #f0eeea; font-size: 13px; cursor: pointer; text-align: center; color: #666; -webkit-tap-highlight-color: transparent; }
+.sev-btn { flex:1; padding: 8px; border-radius: 8px; border: 1px solid #e5e3de; background: #f0eeea; font-size: 13px; cursor: pointer; text-align: center; color: #666; }
 .sev-btn.on-low { background: #e8f8f1; border-color: #5DCAA5; color: #0F6E56; font-weight: 600; }
 .sev-btn.on-mid { background: #faeeda; border-color: #EF9F27; color: #854F0B; font-weight: 600; }
 .sev-btn.on-high { background: #fff3f0; border-color: #F0997B; color: #993C1D; font-weight: 600; }
@@ -80,7 +81,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 .btn-primary { flex:1; padding: 13px; background: #1D9E75; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
 .btn-secondary { padding: 13px 18px; background: #f0eeea; color: #666; border: 1px solid #d0cec8; border-radius: 10px; font-size: 15px; cursor: pointer; }
 .export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.exp-card { background: #fff; border: 1.5px solid #e5e3de; border-radius: 12px; padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.exp-card { background: #fff; border: 1.5px solid #e5e3de; border-radius: 12px; padding: 14px; cursor: pointer; }
 .exp-card.on { border-color: #1D9E75; background: #f0fdf8; }
 .exp-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
 .exp-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
@@ -94,14 +95,13 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 .stat-card { background: #fff; border: 1px solid #e5e3de; border-radius: 12px; padding: 14px; text-align: center; }
 .stat-num { font-size: 24px; font-weight: 700; color: #1D9E75; }
 .stat-label { font-size: 11px; color: #999; margin-top: 3px; text-transform: uppercase; letter-spacing: .05em; }
-.log-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #f8f7f4; border-radius: 10px; border: 1px solid #e5e3de; margin-bottom: 8px; cursor: pointer; }
-.log-item:active { background: #e8f8f1; }
+.log-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #f8f7f4; border-radius: 10px; border: 1px solid #e5e3de; margin-bottom: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .log-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .log-dot.synced { background: #1D9E75; }
 .log-dot.pending { background: #BA7517; }
 .log-info { flex: 1; min-width: 0; }
 .log-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.log-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+.log-sub { font-size: 11px; color: #aaa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .log-badge { font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
 .lb-s { background: #e1f5ee; color: #0F6E56; }
 .lb-p { background: #faeeda; color: #854F0B; }
@@ -114,17 +114,19 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 .msec { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 7px; }
 .modal input { width: 100%; padding: 11px 13px; border: 1px solid #d0cec8; border-radius: 10px; font-size: 14px; font-family: monospace; outline: none; margin-bottom: 14px; background: #f8f7f4; color: #1a1a18; }
 .modal input:focus { border-color: #1D9E75; background: #fff; }
-.modal textarea { width: 100%; padding: 11px 13px; border: 1px solid #d0cec8; border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; margin-bottom: 14px; background: #f8f7f4; color: #1a1a18; resize: vertical; }
+.modal textarea { width: 100%; padding: 11px 13px; border: 1px solid #d0cec8; border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; margin-bottom: 10px; background: #f8f7f4; color: #1a1a18; resize: vertical; line-height: 1.6; }
 .modal textarea:focus { border-color: #1D9E75; background: #fff; }
 .modal-btns { display: flex; gap: 10px; }
 .modal-btns button { flex:1; padding: 13px; border-radius: 10px; font-size: 15px; cursor: pointer; font-family: inherit; font-weight: 600; }
 .btn-cancel { background: #f0eeea; border: 1px solid #d0cec8; color: #555; }
 .btn-ok { background: #1D9E75; border: none; color: #fff; }
 .field-row { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f0eeea; font-size: 13px; }
-.field-key { color: #999; min-width: 130px; flex-shrink: 0; }
-.field-val { color: #1a1a18; flex: 1; }
-.opt-result { display: none; margin-top: 12px; background: #e8f8f1; border: 1px solid #9FE1CB; border-radius: 10px; padding: 14px; font-size: 13px; line-height: 1.7; color: #0F6E56; white-space: pre-wrap; }
+.field-key { color: #999; min-width: 130px; flex-shrink: 0; font-size: 12px; }
+.field-val { color: #1a1a18; flex: 1; line-height: 1.5; }
+.opt-result { display: none; margin-top: 12px; background: #e8f8f1; border: 1px solid #9FE1CB; border-radius: 10px; padding: 14px; font-size: 13px; line-height: 1.8; color: #0F6E56; white-space: pre-wrap; }
 .opt-result.show { display: block; }
+.setup-banner { background: #fff8e1; border: 1px solid #ffe082; border-radius: 12px; padding: 16px; margin-bottom: 14px; font-size: 14px; line-height: 1.6; color: #5d4037; }
+.setup-banner strong { display: block; margin-bottom: 6px; font-size: 15px; }
 .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(70px); background: #1a1a18; color: #fff; font-size: 14px; padding: 11px 22px; border-radius: 22px; z-index: 200; transition: transform .28s cubic-bezier(.34,1.56,.64,1); pointer-events: none; white-space: nowrap; max-width: 90vw; text-align: center; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .divider { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e3de; }
@@ -140,26 +142,32 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   </div>
   <div style="display:flex;gap:8px;align-items:center;">
     <span id="onlineEl" style="font-size:12px;color:#aaa;"></span>
-    <div class="icon-btn" id="keyBtn" onclick="openKeyModal()">🔑</div>
+    <div class="icon-btn" id="keyBtn" onclick="openKeyModal()">&#128273;</div>
   </div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="goTab('stemme',this)">🎙 Opptak</div>
-  <div class="tab" onclick="goTab('skjema',this)">📋 Skjema</div>
-  <div class="tab" onclick="goTab('eksport',this)">📤 Eksport</div>
-  <div class="tab" onclick="goTab('logg',this)">📁 Historikk</div>
+  <div class="tab active" onclick="goTab('stemme',this)">&#127908; Opptak</div>
+  <div class="tab" onclick="goTab('skjema',this)">&#128203; Skjema</div>
+  <div class="tab" onclick="goTab('eksport',this)">&#128228; Eksport</div>
+  <div class="tab" onclick="goTab('logg',this)">&#128193; Historikk</div>
 </div>
 
 <!-- STEMME -->
 <div class="page active" id="page-stemme">
+  <div id="setupBanner" class="setup-banner" style="display:none;">
+    <strong>&#128273; Legg inn Gemini API-nøkkel for å starte</strong>
+    Hent gratis nøkkel på <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#1D9E75;">aistudio.google.com</a> — helt gratis, ingen betalingskort.
+    <br><br>
+    <button onclick="openKeyModal()" style="background:#1D9E75;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:4px;">Legg inn nøkkel</button>
+  </div>
   <div class="status-bar">
     <div class="sdot" id="sdot"></div>
     <span id="stext">Klar til registrering</span>
     <span class="engine-pill" id="epill">Sjekker...</span>
   </div>
   <div class="alert-card" id="alertCard">
-    <div class="alert-title" id="alertTitle">Varsel</div>
+    <div class="alert-title" id="alertTitle">&#9888; Varsel</div>
     <div class="alert-body" id="alertBody"></div>
   </div>
   <div class="card">
@@ -174,16 +182,17 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
       <span id="live"></span>
       <span class="wc" id="wc"></span>
     </div>
-    <div class="ai-card" id="aiCard">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-        <span class="ai-badge">Claude</span>
-        <span style="font-size:13px;color:#0F6E56;font-weight:500;">Analysert ✓</span>
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <span class="result-badge">Gemini</span>
+        <span class="result-summary" id="resSummary"></span>
       </div>
-      <div class="ai-summary" id="aiSum"></div>
-      <div class="ai-fields" id="aiFields"></div>
-      <div class="ai-actions">
-        <button class="btn-use" onclick="useInForm()">✓ Overfør til skjema</button>
-        <button class="btn-skip" onclick="dismissResult()">Forkast</button>
+      <div class="result-body">
+        <div class="result-fields" id="resFields"></div>
+        <div class="result-actions">
+          <button class="btn-use" onclick="useInForm()">&#10003; Overfør til skjema</button>
+          <button class="btn-skip" onclick="dismissResult()">Forkast</button>
+        </div>
       </div>
     </div>
   </div>
@@ -200,8 +209,8 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   </div>
   <div class="card">
     <div class="card-title" style="margin-bottom:10px;">Skriv inn manuelt</div>
-    <textarea class="manual-area" id="manualText" rows="3" placeholder="F.eks: Merd 4, snittvekt 2,3 kg, 5 dødfisk, petekkier paa lever..."></textarea>
-    <button class="btn-analyze" onclick="analyzeManual()">Analyser med Claude</button>
+    <textarea class="manual-area" id="manualText" rows="3" placeholder="F.eks: Merd 4, snittvekt 2,3 kg, 5 dødfisk, petekkier på lever..."></textarea>
+    <button class="btn-analyze" onclick="analyzeManual()">Analyser med Gemini</button>
   </div>
 </div>
 
@@ -258,7 +267,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
         <span class="tag" onclick="togTag(this)">Blek</span>
         <span class="tag" onclick="togTag(this)">Eksofthalmi</span>
         <span class="tag" onclick="togTag(this)">Katarakt</span>
-        <span class="tag" onclick="togTag(this)">Snute-/kjevelesjon</span>
+        <span class="tag" onclick="togTag(this)">Snutelesjon</span>
       </div></div>
       <div class="sep">Gjeller</div>
       <div class="fg full"><div class="tags">
@@ -273,7 +282,6 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
       <div class="fg full"><div class="tags">
         <span class="tag" onclick="togTag(this)">Lever normal</span>
         <span class="tag warn" onclick="togTag(this)">Blek lever</span>
-        <span class="tag warn" onclick="togTag(this)">Bleket lever</span>
         <span class="tag warn" onclick="togTag(this)">Gul lever</span>
         <span class="tag warn" onclick="togTag(this)">Petekkier på lever</span>
         <span class="tag warn" onclick="togTag(this)">Forstørret lever</span>
@@ -372,9 +380,9 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   <button class="btn-primary" onclick="syncAll()" style="width:100%;">Synkroniser alle</button>
   <div class="card" style="margin-top:14px;">
     <div class="card-title">Lær appen nye ord</div>
-    <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.5;">Fant appen et ord feil? Legg inn rettelsen så husker Claude det neste gang.</p>
+    <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.5;">Fant appen et ord feil? Legg inn rettelsen så husker Gemini det neste gang.</p>
     <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <input id="cv-wrong" placeholder="Feil ord (f.eks. pankres)" style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid #d0cec8;font-size:14px;font-family:inherit;outline:none;">
+      <input id="cv-wrong" placeholder="Feil (f.eks. pankres)" style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid #d0cec8;font-size:14px;font-family:inherit;outline:none;">
       <span style="display:flex;align-items:center;color:#aaa;font-size:20px;">&#8594;</span>
       <input id="cv-right" placeholder="Riktig (f.eks. PD)" style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid #d0cec8;font-size:14px;font-family:inherit;outline:none;">
     </div>
@@ -383,15 +391,17 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   </div>
 </div>
 
-<!-- Nykkel-modal -->
+<!-- Nøkkel-modal -->
 <div class="overlay" id="keyModal" onclick="if(event.target===this)closeKeyModal()">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>API-nøkler</h3>
-    <p>Lagres kun lokalt i denne nettleseren.</p>
-    <div class="msec">Anthropic Claude (påkrevd)</div>
-    <input type="password" id="k-ant" placeholder="sk-ant-...">
-    <div class="msec">OpenAI Whisper (valgfritt, for iPhone)</div>
+    <h3>&#128273; API-nøkler</h3>
+    <p>Nøklene lagres fast i nettleseren — du trenger bare å legge dem inn én gang.</p>
+    <div class="msec">Google Gemini (gratis)</div>
+    <p style="font-size:12px;color:#888;margin:-8px 0 8px;">Hent gratis nøkkel på <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#1D9E75;">aistudio.google.com</a></p>
+    <input type="password" id="k-gem" placeholder="AIza...">
+    <div class="msec">OpenAI Whisper (valgfritt, for iPhone-stemme)</div>
+    <p style="font-size:12px;color:#888;margin:-8px 0 8px;">Hent nøkkel på <a href="https://platform.openai.com/api-keys" target="_blank" style="color:#1D9E75;">platform.openai.com</a></p>
     <input type="password" id="k-oai" placeholder="sk-...">
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeKeyModal()">Avbryt</button>
@@ -400,7 +410,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   </div>
 </div>
 
-<!-- Entry-detail modal -->
+<!-- Entry-detalj modal -->
 <div class="overlay" id="entryModal" onclick="if(event.target===this)closeEntry()">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -408,7 +418,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
       <h3 id="em-title" style="font-size:16px;max-width:80%;"></h3>
       <span onclick="closeEntry()" style="font-size:24px;color:#ccc;cursor:pointer;line-height:1;">&#215;</span>
     </div>
-    <div class="msec">Rå transkripsjon (rediger og re-analyser)</div>
+    <div class="msec">Rå transkripsjon</div>
     <textarea id="em-raw" rows="4" placeholder="Ingen transkripsjon lagret"></textarea>
     <div style="display:flex;gap:8px;margin-bottom:16px;">
       <button onclick="reanalyze()" style="flex:1;padding:10px;background:#f0eeea;border:1px solid #d0cec8;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:#555;">Re-analyser</button>
@@ -418,8 +428,8 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
     <div id="em-fields" style="margin-bottom:16px;"></div>
     <div style="padding-top:14px;border-top:1px solid #e5e3de;">
       <div class="msec">AI-optimalisering</div>
-      <p style="font-size:13px;color:#888;margin-bottom:10px;line-height:1.5;">Claude fyller inn manglende felt, foreslår diagnose og skriver klinisk vurdering.</p>
-      <button onclick="optimizeEntry()" id="optBtn" style="width:100%;padding:11px;background:#1D9E75;border:none;border-radius:10px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;">✦ Optimaliser med Claude</button>
+      <p style="font-size:13px;color:#888;margin-bottom:10px;line-height:1.5;">Gemini fyller inn manglende felt, foreslår diagnose og skriver klinisk vurdering.</p>
+      <button onclick="optimizeEntry()" id="optBtn" style="width:100%;padding:11px;background:#1D9E75;border:none;border-radius:10px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;">&#10022; Optimaliser med Gemini</button>
       <div class="opt-result" id="optResult"></div>
     </div>
     <div style="display:flex;gap:10px;margin-top:18px;">
@@ -432,84 +442,64 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 
 <script>
 // ============================================================
-// STORAGE — defineres foerst
+// STORAGE — defineres først
 // ============================================================
 var _mem = {};
-function lsGet(k) { try { return localStorage.getItem(k); } catch(e) { return _mem[k] || null; } }
-function lsSet(k, v) { try { localStorage.setItem(k, v); _mem[k] = v; } catch(e) { _mem[k] = v; } }
-function getE() { try { return JSON.parse(lsGet('fa_e') || '[]'); } catch(e) { return []; } }
+function lsGet(k) { try { return localStorage.getItem(k); } catch(e) { return _mem[k]||null; } }
+function lsSet(k,v) { try { localStorage.setItem(k,v); _mem[k]=v; } catch(e) { _mem[k]=v; } }
+function getE() { try { return JSON.parse(lsGet('fa_e')||'[]'); } catch(e) { return []; } }
 function putE(a) { lsSet('fa_e', JSON.stringify(a)); }
 
 // ============================================================
 // STATE
 // ============================================================
-var anthroKey = lsGet('fa_k') || '';
-var openaiKey = lsGet('fa_o') || '';
+var geminiKey = lsGet('fa_gem') || '';
+var openaiKey = lsGet('fa_o')   || '';
 var curExp = 'vi';
 var lastParsed = null;
 var curSev = '';
 var curEntryIdx = -1;
-
-// Speech
 var recog = null, isListening = false, finalText = '';
 var mediaRec = null, audioChunks = [], isRecording = false;
 var engine = 'none';
 
 // ============================================================
-// VOCAB — fagtilpasset med uttalevarianser
+// VOCAB + SYSTEM PROMPT
 // ============================================================
-var VOCAB = [
-  'merd','luseskjoert','not','snittvekt','biomasse','FCR','SGR','tilvekst',
-  'lusenivaa','voksne hunnlus','bevegelige lus','fastsittende lus','lusetelling',
-  'petekkier','petekki','blodning','hyperemi','nekrose','fibrin','ascites','ekssudater',
-  'hemoragi','oedem','infiltrasjon','degenerasjon','atrofi',
-  'lever','milt','nyre','hjerte','tarm','gjeller','gjellelokk','svommblare',
-  'blek lever','bleket lever','gul lever','forstorret lever',
-  'gjellenekrose','gjellebloedning','mukus','svulne gjeller','ameboese gjeller',
-  'pankreassykdom','PD','IHN','VHS','ISA','IPN','CMS','hjertesprekk','HSMI',
-  'AGD','ameboes gjellesykdom','branchionephritis','furunkulose','BKD','flavobakteriose',
-  'histologi','virologi','bakteriologi','PCR','organpakke','gjelleavskrap','blodproeve',
-  'Veterinærinstituttet','Patogen','PHARMAQ','Blue Analytics',
-  'atlantisk laks','regnbueoerret','postsmolt','smolt','settefisk',
-  'hydrogenperoksid','azametifos','deltametrin','rensefisk','termisk behandling'
-];
-
 var CORRECTIONS = [
-  '"pankreas" / "pankreass" / "pankres" / "pancreas" → pankreassykdom (PD)',
-  '"marit" / "merret" / "merit" → merd',
-  '"AGD" / "asjede" / "asjd" / "amøbe" → amøbøs gjellesykdom (AGD)',
-  '"CMS" / "hjertesprekk" / "hjertesprek" -> kardiomyopati syndrom (CMS)',
-  '"IPN" / "i pe en" -> infeksios pankreasnekrose (IPN)',
-  '"ISA" / "i es a" / "infeksios laksanemie" -> ISA',
-  '"HSMI" / "hjerte skjelett" -> HSMI',
-  '"to komma tre" -> 2,3',
-  '"en komma fem" -> 1,5',
-  '"null komma atte" -> 0,8',
-  '"null komma fire" -> 0,4'
+  "pankreas/pankreass/pankres betyr pankreassykdom (PD)",
+  "marit/merret/merit betyr merd",
+  "AGD/asjede/asjd/amobe betyr amobos gjellesykdom (AGD)",
+  "CMS/hjertesprekk/hjertesprek betyr kardiomyopati syndrom (CMS)",
+  "IPN/i pe en betyr infeksios pankreasnekrose (IPN)",
+  "ISA/i es a betyr infeksios lakseanemi (ISA)",
+  "HSMI/hjerte skjelett betyr HSMI",
+  "to komma tre betyr 2.3",
+  "null komma atte betyr 0.8",
+  "null komma fire betyr 0.4"
 ];
 
-function getCustomVocab() { try { return JSON.parse(lsGet('fa_cv') || '{}'); } catch(e) { return {}; } }
+function getCustomVocab() { try { return JSON.parse(lsGet('fa_cv')||'{}'  ); } catch(e) { return {}; } }
 function saveCustomVocab(o) { lsSet('fa_cv', JSON.stringify(o)); }
 
 function buildSysPrompt() {
   var cv = getCustomVocab();
-  var custom = Object.keys(cv).map(function(k) { return '"' + k + '" -> ' + cv[k]; });
-  var allCorrections = CORRECTIONS.concat(custom).join('\n');
-  var vocabStr = VOCAB.join(', ');
-
-  return 'Du er en erfaren fiskehelsebiolog-assistent. Analyser feltnotat og returner KUN gyldig JSON.\n\n'
-    + 'Fagvokabular: ' + vocabStr + '\n\n'
-    + 'Korriger disse uttalevariantene ALLTID:\n' + allCorrections + '\n\n'
-    + 'Regler:\n'
-    + '- Korriger norske talluttrykk til sifre\n'
-    + '- Bruk fagkunnskap til aa gjette mest sannsynlig mening\n'
-    + '- Returner KUN dette JSON-objektet:\n'
-    + '{"merd":null,"art":null,"snittvekt_kg":null,"antall_fisk":null,"dod_fisk":null,'
+  var custom = Object.keys(cv).map(function(k) { return k + " betyr " + cv[k]; });
+  var allCorr = CORRECTIONS.concat(custom).join("\n");
+  var jsonTpl = '{"merd":null,"art":null,"snittvekt_kg":null,"antall_fisk":null,"dod_fisk":null,'
     + '"temp":null,"oksygen":null,"lus_hv":null,"lus_bev":null,"lus_fas":null,'
     + '"prove_type":null,"lab":null,'
     + '"ytre_funn":[],"gjelle_funn":[],"indre_funn":[],"differensialdiagnoser":[],'
     + '"vurdering":null,"tiltak":null,"varsel":false,"varsel_tekst":null,'
-    + '"alvorlighet":null,"sammendrag":"kort norsk sammendrag"}';
+    + '"alvorlighet":null,"sammendrag":"klinisk oppsummering"}';
+  return "Du er en erfaren fiskehelsebiolog-assistent. Analyser feltnotat og returner KUN et gyldig JSON-objekt uten noen annen tekst.\n\n"
+    + "VIKTIGE RETTELSER - alltid korriger disse:\n" + allCorr + "\n\n"
+    + "Regler:\n"
+    + "- Korriger norske talluttrykk til sifre (to komma tre -> 2,3 osv)\n"
+    + "- Bruk fagkunnskap til a tolke usikre ord\n"
+    + "- Skriv en klinisk oppsummering pa 1-2 setninger i sammendrag-feltet\n"
+    + "- Dersom det er mistanke om alvorlig sykdom, sett varsel=true\n\n"
+    + "Returner KUN dette JSON-objektet:\n" + jsonTpl;
 }
 
 // ============================================================
@@ -517,25 +507,25 @@ function buildSysPrompt() {
 // ============================================================
 window.addEventListener('DOMContentLoaded', function() {
   var now = new Date();
-  document.getElementById('f-dato').value = now.toISOString().slice(0, 10);
-  document.getElementById('f-tid').value  = now.toTimeString().slice(0, 5);
-  document.getElementById('f-ldato').value = now.toISOString().slice(0, 10);
+  document.getElementById('f-dato').value = now.toISOString().slice(0,10);
+  document.getElementById('f-tid').value  = now.toTimeString().slice(0,5);
+  document.getElementById('f-ldato').value = now.toISOString().slice(0,10);
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(p) {
-      document.getElementById('f-gps').value = p.coords.latitude.toFixed(5) + ', ' + p.coords.longitude.toFixed(5);
-    }, function() {});
+      document.getElementById('f-gps').value = p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5);
+    }, function(){});
   }
 
   var savedName = lsGet('fa_name');
   if (savedName) document.getElementById('f-bio').value = savedName;
   document.getElementById('f-bio').addEventListener('change', function() { lsSet('fa_name', this.value); });
 
-  ['f-dod', 'f-antall'].forEach(function(id) {
+  ['f-dod','f-antall'].forEach(function(id) {
     document.getElementById(id).addEventListener('input', function() {
       var d = parseFloat(document.getElementById('f-dod').value);
       var a = parseFloat(document.getElementById('f-antall').value);
-      if (d > 0 && a > 0) document.getElementById('f-dodpst').value = ((d / a) * 100).toFixed(2);
+      if (d>0 && a>0) document.getElementById('f-dodpst').value = ((d/a)*100).toFixed(2);
     });
   });
 
@@ -552,21 +542,23 @@ window.addEventListener('DOMContentLoaded', function() {
   detectEngine();
   renderLog();
   renderPreview();
+
+  if (!geminiKey) document.getElementById('setupBanner').style.display = 'block';
 });
 
 // ============================================================
 // ENGINE DETECTION
 // ============================================================
 function detectEngine() {
-  var hasWS = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
-  var hasMR = ('MediaRecorder' in window) && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  var hasWS = ('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
+  var hasMR = ('MediaRecorder' in window)&&!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
   if (hasWS) {
     engine = 'webspeech';
     document.getElementById('epill').textContent = 'Web Speech';
   } else if (hasMR) {
     engine = 'whisper';
     document.getElementById('epill').textContent = openaiKey ? 'Whisper' : 'Trenger OpenAI-nøkkel';
-    if (!openaiKey) document.getElementById('micLabel').textContent = 'Legg inn OpenAI-nøkkel, eller bruk tekst';
+    if (!openaiKey) document.getElementById('micLabel').textContent = 'Legg inn OpenAI-nøkkel for stemme';
   } else {
     engine = 'none';
     document.getElementById('micBtn').disabled = true;
@@ -581,152 +573,126 @@ function goTab(name, el) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   el.classList.add('active');
-  document.getElementById('page-' + name).classList.add('active');
-  if (name === 'eksport') renderPreview();
-  if (name === 'logg') renderLog();
+  document.getElementById('page-'+name).classList.add('active');
+  if (name==='eksport') renderPreview();
+  if (name==='logg') renderLog();
 }
 
 // ============================================================
-// MIC / RECORDING
+// MIC
 // ============================================================
 function toggleMic() {
-  if (engine === 'webspeech') {
-    if (isListening) stopWS(); else startWS();
-  } else if (engine === 'whisper') {
-    if (!openaiKey) { openKeyModal(); toast('Legg inn OpenAI-nokkel'); return; }
-    if (isRecording) stopWhisper(); else startWhisper();
-  }
+  if (!geminiKey) { openKeyModal(); toast('Legg inn Gemini-nøkkel først'); return; }
+  if (engine==='webspeech') { if (isListening) stopWS(); else startWS(); }
+  else if (engine==='whisper') { if (!openaiKey) { openKeyModal(); return; } if (isRecording) stopWhisper(); else startWhisper(); }
 }
 
 function startWS() {
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  finalText = ''; isListening = true;
+  var SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  finalText=''; isListening=true;
   micOn('Opptak pågår — trykk stopp når ferdig');
-
   function spawn() {
     if (!isListening) return;
     recog = new SR();
-    recog.lang = 'nb-NO';
-    recog.continuous = false;
-    recog.interimResults = true;
+    recog.lang='nb-NO'; recog.continuous=false; recog.interimResults=true;
     recog.onresult = function(e) {
-      var interim = '';
-      for (var i = e.resultIndex; i < e.results.length; i++) {
-        var t = e.results[i][0].transcript;
+      var interim='';
+      for (var i=e.resultIndex;i<e.results.length;i++) {
+        var t=e.results[i][0].transcript;
         if (e.results[i].isFinal) finalText += (finalText ? ' ' : '') + t.trim();
-        else interim = t;
+        else interim=t;
       }
       showLive(finalText, interim);
     };
     recog.onerror = function(e) {
-      if (e.error === 'not-allowed') { toast('Tillat mikrofon'); isListening = false; micOff(); return; }
-      setTimeout(spawn, 150);
+      if (e.error==='not-allowed') { toast('Tillat mikrofon i nettleseren'); isListening=false; micOff(); return; }
+      setTimeout(spawn,150);
     };
-    recog.onend = function() { if (isListening) setTimeout(spawn, 80); };
-    try { recog.start(); } catch(e) { setTimeout(spawn, 300); }
+    recog.onend = function() { if (isListening) setTimeout(spawn,80); };
+    try { recog.start(); } catch(e) { setTimeout(spawn,300); }
   }
   spawn();
 }
 
 function stopWS() {
-  isListening = false;
-  if (recog) { try { recog.stop(); } catch(e) {} recog = null; }
+  isListening=false;
+  if (recog) { try{recog.stop();}catch(e){} recog=null; }
   micOff();
-  var text = finalText.trim();
-  showLive(text, '');
-  if (!text) { setStatus('', 'Ingenting registrert — prøv igjen'); return; }
-  // Save raw transcript immediately
-  saveRawTranscript(text);
-  if (!anthroKey) { openKeyModal(); toast('Legg inn API-nøkkel for å analysere'); return; }
-  setStatus('processing', 'Analyserer...');
-  callClaude(text);
+  var text=finalText.trim();
+  showLive(text,'');
+  if (!text) { setStatus('','Ingenting registrert — prøv igjen'); return; }
+  saveRaw(text);
+  setStatus('processing','Analyserer med Gemini...');
+  callGemini(text);
 }
 
 function startWhisper() {
-  navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-    audioChunks = []; isRecording = true;
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream) {
+    audioChunks=[]; isRecording=true;
     micOn('Tar opp — trykk stopp når ferdig');
-    var mime = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg']
-      .find(function(t) { return MediaRecorder.isTypeSupported(t); }) || '';
-    try { mediaRec = new MediaRecorder(stream, mime ? { mimeType: mime } : {}); }
-    catch(e) { mediaRec = new MediaRecorder(stream); }
-    mediaRec.ondataavailable = function(e) { if (e.data && e.data.size > 0) audioChunks.push(e.data); };
-    mediaRec.onstop = function() {
-      stream.getTracks().forEach(function(t) { t.stop(); });
-      sendWhisper(new Blob(audioChunks, { type: mediaRec.mimeType || 'audio/mp4' }));
-    };
+    var mime=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg'].find(function(t){return MediaRecorder.isTypeSupported(t);})||'';    try{mediaRec=new MediaRecorder(stream,mime?{mimeType:mime}:{});}catch(e){mediaRec=new MediaRecorder(stream);}
+    mediaRec.ondataavailable=function(e){if(e.data&&e.data.size>0)audioChunks.push(e.data);};
+    mediaRec.onstop=function(){stream.getTracks().forEach(function(t){t.stop();});sendWhisper(new Blob(audioChunks,{type:mediaRec.mimeType||'audio/mp4'}));};
     mediaRec.start();
-  }).catch(function() { toast('Mikrofontilgang nektet'); micOff(); });
+  }).catch(function(){toast('Mikrofontilgang nektet');micOff();});
 }
 
 function stopWhisper() {
-  isRecording = false;
-  if (mediaRec && mediaRec.state !== 'inactive') { setStatus('processing', 'Transkriberer...'); mediaRec.stop(); }
+  isRecording=false;
+  if (mediaRec&&mediaRec.state!=='inactive'){setStatus('processing','Transkriberer...');mediaRec.stop();}
   document.getElementById('micBtn').classList.remove('on');
 }
 
 async function sendWhisper(blob) {
-  if (blob.size < 500) { setStatus('', 'For kort — snakk lenger'); micOff(); return; }
-  document.getElementById('hint').style.display = 'none';
-  document.getElementById('live').innerHTML = '...';
-  var ext = blob.type.includes('mp4') ? 'm4a' : blob.type.includes('ogg') ? 'ogg' : 'webm';
-  var form = new FormData();
-  form.append('file', blob, 'r.' + ext);
-  form.append('model', 'whisper-1');
-  form.append('language', 'no');
+  if (blob.size<500){setStatus('','For kort — snakk lenger');micOff();return;}
+  document.getElementById('hint').style.display='none';
+  var ext=blob.type.includes('mp4')?'m4a':blob.type.includes('ogg')?'ogg':'webm';
+  var form=new FormData();
+  form.append('file',blob,'r.'+ext);
+  form.append('model','whisper-1');
+  form.append('language','no');
   try {
-    var res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-      method: 'POST', headers: { 'Authorization': 'Bearer ' + openaiKey }, body: form
-    });
-    var d = await res.json();
-    if (d.error) throw new Error(d.error.message);
-    var text = (d.text || '').trim();
-    showLive(text, '');
-    if (!text) { setStatus('', 'Ingen tale registrert — prøv igjen'); return; }
-    // Save raw transcript immediately
-    saveRawTranscript(text);
-    if (!anthroKey) { openKeyModal(); toast('Legg inn API-nøkkel for å analysere'); return; }
-    setStatus('processing', 'Analyserer...');
-    callClaude(text);
-  } catch(err) {
-    setStatus('', 'Whisper-feil — sjekk OpenAI-nøkkel');
-    toast('Feil: ' + err.message.slice(0, 50));
-  }
+    var res=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{'Authorization':'Bearer '+openaiKey},body:form});
+    var d=await res.json();
+    if(d.error) throw new Error(d.error.message);
+    var text=(d.text||'').trim();
+    showLive(text,'');
+    if(!text){setStatus('','Ingen tale registrert');return;}
+    saveRaw(text);
+    setStatus('processing','Analyserer med Gemini...');
+    callGemini(text);
+  } catch(err){setStatus('','Whisper-feil');toast('Feil: '+err.message.slice(0,50));}
   micOff();
 }
 
 function micOn(label) {
   document.getElementById('micBtn').classList.add('on');
-  document.getElementById('micLabel').textContent = label;
-  document.getElementById('hint').style.display = 'none';
-  document.getElementById('live').innerHTML = '';
-  document.getElementById('wc').textContent = '';
-  document.getElementById('aiCard').classList.remove('show');
+  document.getElementById('micLabel').textContent=label;
+  document.getElementById('hint').style.display='none';
+  document.getElementById('live').innerHTML='';
+  document.getElementById('wc').textContent='';
+  document.getElementById('resultCard').classList.remove('show');
   document.getElementById('alertCard').classList.remove('show');
-  setStatus('listening', label);
+  setStatus('listening',label);
 }
-
 function micOff() {
   document.getElementById('micBtn').classList.remove('on');
-  document.getElementById('micLabel').textContent = 'Trykk for å starte opptak';
-  isListening = false; isRecording = false;
+  document.getElementById('micLabel').textContent='Trykk for å starte opptak';
+  isListening=false; isRecording=false;
 }
-
-function showLive(fin, interim) {
-  document.getElementById('hint').style.display = 'none';
+function showLive(fin,interim) {
+  document.getElementById('hint').style.display='none';
   document.getElementById('live').innerHTML = fin + (interim ? '<span class="interim">' + (fin ? ' ' : '') + interim + '</span>' : '');
-  var wc = fin.trim().split(/\s+/).filter(Boolean).length;
-  document.getElementById('wc').textContent = wc > 0 ? wc + ' ord' : '';
+  var wc=fin.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('wc').textContent=wc>0?wc+' ord':'';
 }
-
-function setStatus(type, text) {
-  var dot = document.getElementById('sdot');
-  dot.className = 'sdot' + (type ? ' ' + type : '');
-  document.getElementById('stext').textContent = text;
+function setStatus(type,text) {
+  var dot=document.getElementById('sdot');
+  dot.className='sdot'+(type?' '+type:'');
+  document.getElementById('stext').textContent=text;
 }
-
 function addPhrase(txt) {
-  var el = document.getElementById('manualText');
+  var el=document.getElementById('manualText');
   el.value = (el.value ? el.value + ', ' : '') + txt;
   el.focus();
 }
@@ -735,77 +701,64 @@ function addPhrase(txt) {
 // MANUAL
 // ============================================================
 function analyzeManual() {
-  var txt = document.getElementById('manualText').value.trim();
-  if (!txt) { toast('Skriv inn noe først'); return; }
-  if (!anthroKey) { openKeyModal(); return; }
-  showLive(txt, '');
-  saveRawTranscript(txt);
-  setStatus('processing', 'Analyserer...');
-  callClaude(txt);
+  var txt=document.getElementById('manualText').value.trim();
+  if (!txt){toast('Skriv inn noe først');return;}
+  if (!geminiKey){openKeyModal();return;}
+  showLive(txt,'');
+  saveRaw(txt);
+  setStatus('processing','Analyserer med Gemini...');
+  callGemini(txt);
 }
 
 // ============================================================
-// CLAUDE
+// GEMINI API
 // ============================================================
-async function callClaude(text) {
+async function callGemini(text) {
+  var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+geminiKey;
+  var body={
+    contents:[{parts:[{text: buildSysPrompt()+'\n\nFeltnotat: '+text}]}],
+    generationConfig:{temperature:0.1,maxOutputTokens:1200}
+  };
   try {
-    var res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthroKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1200,
-        system: buildSysPrompt(),
-        messages: [{ role: 'user', content: text }]
-      })
-    });
-    var d = await res.json();
+    var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    var d=await res.json();
     if (d.error) throw new Error(d.error.message);
-    var raw = d.content[0].text.replace(/[\u0060]{3}json/g, '').replace(/[\u0060]{3}/g, '').trim();
-    lastParsed = JSON.parse(raw);
-    lastParsed._raw = text;
-    showAiCard();
-    setStatus('done', 'Analysert ✓');
+    var raw=d.candidates[0].content.parts[0].text;
+    raw=raw.replace(/```json/g,'').replace(/```/g,'').trim();
+    // Find JSON object
+    var start=raw.indexOf('{');
+    var end=raw.lastIndexOf('}');
+    if (start===-1||end===-1) throw new Error('Ingen JSON i svar');
+    lastParsed=JSON.parse(raw.slice(start,end+1));
+    lastParsed._raw=text;
+    showResultCard();
+    setStatus('done','Analysert ✓');
     fillForm();
-    // Update the draft entry with the AI-parsed form data
-    var entries = getE();
-    if (entries.length > 0 && entries[0].draft) {
-      entries[0].data = getFormData();
-      entries[0].draft = false;
-      putE(entries);
-      renderLog();
-    } else {
-      saveEntry(true);
-    }
+    updateDraftEntry();
   } catch(err) {
-    setStatus('', 'Feil — sjekk nøkkel');
-    toast('Feil: ' + err.message.slice(0, 60));
+    setStatus('','Feil — sjekk Gemini-nøkkel');
+    toast('Feil: '+err.message.slice(0,70));
     console.error(err);
   }
 }
 
-function showAiCard() {
+function showResultCard() {
   if (!lastParsed) return;
-  document.getElementById('aiSum').textContent = lastParsed.sammendrag || 'Analysert';
-  var fields = [
-    { l: 'Merd',       v: lastParsed.merd },
-    { l: 'Snittvekt',  v: lastParsed.snittvekt_kg ? lastParsed.snittvekt_kg + ' kg' : null },
-    { l: 'Dødfisk',   v: lastParsed.dod_fisk },
-    { l: 'Proeve',     v: lastParsed.prove_type },
-    { l: 'Alvorlighet',v: lastParsed.alvorlighet }
-  ].filter(function(f) { return f.v; });
-  document.getElementById('aiFields').innerHTML = fields.map(function(f) {
-    return '<div class="ai-field"><div class="ai-field-label">' + f.l + '</div><div class="ai-field-val">' + f.v + '</div></div>';
+  document.getElementById('resSummary').textContent=lastParsed.sammendrag||'';
+  var fields=[
+    {l:'Merd',v:lastParsed.merd},
+    {l:'Snittvekt',v:lastParsed.snittvekt_kg?lastParsed.snittvekt_kg+' kg':null},
+    {l:'Dødfisk',v:lastParsed.dod_fisk},
+    {l:'Prøve',v:lastParsed.prove_type},
+    {l:'Alvorlighet',v:lastParsed.alvorlighet}
+  ].filter(function(f){return f.v;});
+  document.getElementById('resFields').innerHTML=fields.map(function(f){
+    return '<div class="rf"><div class="rf-label">'+f.l+'</div><div class="rf-val">'+f.v+'</div></div>';
   }).join('');
-  document.getElementById('aiCard').classList.add('show');
-  if (lastParsed.varsel && lastParsed.varsel_tekst) {
-    document.getElementById('alertTitle').textContent = 'Varsel';
-    document.getElementById('alertBody').textContent  = lastParsed.varsel_tekst;
+  document.getElementById('resultCard').classList.add('show');
+  if (lastParsed.varsel&&lastParsed.varsel_tekst) {
+    document.getElementById('alertTitle').textContent='⚠ Varsel';
+    document.getElementById('alertBody').textContent=lastParsed.varsel_tekst;
     document.getElementById('alertCard').classList.add('show');
   }
 }
@@ -815,201 +768,176 @@ function showAiCard() {
 // ============================================================
 function fillForm() {
   if (!lastParsed) return;
-  function sf(id, v) {
-    if (v === null || v === undefined || v === '') return;
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.value = v;
-    el.classList.add('ai');
+  function sf(id,v) {
+    if (v===null||v===undefined||v==='') return;
+    var el=document.getElementById(id); if (!el) return;
+    el.value=v; el.classList.add('ai');
   }
-  sf('f-merd',  lastParsed.merd);
-  sf('f-art',   lastParsed.art);
-  sf('f-vekt',  lastParsed.snittvekt_kg);
+  sf('f-merd',lastParsed.merd);
+  sf('f-art',lastParsed.art);
+  sf('f-vekt',lastParsed.snittvekt_kg);
   sf('f-antall',lastParsed.antall_fisk);
-  sf('f-dod',   lastParsed.dod_fisk);
-  sf('f-temp',  lastParsed.temp);
-  sf('f-o2',    lastParsed.oksygen);
-  sf('f-lhv',   lastParsed.lus_hv);
-  sf('f-lbev',  lastParsed.lus_bev);
-  sf('f-lfas',  lastParsed.lus_fas);
-  sf('f-prove', lastParsed.prove_type);
-  sf('f-lab',   lastParsed.lab);
-  sf('f-vurd',  lastParsed.vurdering);
+  sf('f-dod',lastParsed.dod_fisk);
+  sf('f-temp',lastParsed.temp);
+  sf('f-o2',lastParsed.oksygen);
+  sf('f-lhv',lastParsed.lus_hv);
+  sf('f-lbev',lastParsed.lus_bev);
+  sf('f-lfas',lastParsed.lus_fas);
+  sf('f-prove',lastParsed.prove_type);
+  sf('f-lab',lastParsed.lab);
+  sf('f-vurd',lastParsed.vurdering);
   sf('f-tiltak',lastParsed.tiltak);
-
-  var allVals = (lastParsed.ytre_funn || [])
-    .concat(lastParsed.gjelle_funn || [])
-    .concat(lastParsed.indre_funn || [])
-    .concat(lastParsed.differensialdiagnoser || []);
+  var allVals=(lastParsed.ytre_funn||[]).concat(lastParsed.gjelle_funn||[]).concat(lastParsed.indre_funn||[]).concat(lastParsed.differensialdiagnoser||[]);
   document.querySelectorAll('.tags .tag').forEach(function(t) {
-    var txt = t.textContent.trim().toLowerCase();
-    if (allVals.some(function(s) { return s.toLowerCase() === txt; })) t.classList.add('on');
+    var txt=t.textContent.trim().toLowerCase();
+    if (allVals.some(function(s){return s.toLowerCase()===txt;})) t.classList.add('on');
   });
-
   if (lastParsed.alvorlighet) {
-    var sm = { 'mild': 'low', 'moderat': 'mid', 'alvorlig': 'high' };
-    var sk = sm[(lastParsed.alvorlighet || '').toLowerCase()];
+    var sm={'mild':'low','moderat':'mid','alvorlig':'high'};
+    var sk=sm[(lastParsed.alvorlighet||'').toLowerCase()];
     if (sk) setSev(sk);
   }
-  var dod = parseFloat(document.getElementById('f-dod').value);
-  var ant = parseFloat(document.getElementById('f-antall').value);
-  if (dod > 0 && ant > 0) document.getElementById('f-dodpst').value = ((dod / ant) * 100).toFixed(2);
+  var dod=parseFloat(document.getElementById('f-dod').value);
+  var ant=parseFloat(document.getElementById('f-antall').value);
+  if (dod>0&&ant>0) document.getElementById('f-dodpst').value=((dod/ant)*100).toFixed(2);
 }
 
-function useInForm() {
-  fillForm();
-  dismissResult();
-  toast('Skjema oppdatert');
-  document.querySelectorAll('.tab')[1].click();
-}
-
+function useInForm() { fillForm(); dismissResult(); toast('Skjema oppdatert ✓'); document.querySelectorAll('.tab')[1].click(); }
 function dismissResult() {
-  lastParsed = null; finalText = '';
-  document.getElementById('aiCard').classList.remove('show');
+  lastParsed=null; finalText='';
+  document.getElementById('resultCard').classList.remove('show');
   document.getElementById('alertCard').classList.remove('show');
-  document.getElementById('live').innerHTML = '';
-  document.getElementById('hint').style.display = 'inline';
-  document.getElementById('hint').textContent = 'Det du sier transkribers her i sanntid...';
-  document.getElementById('hint').className = 'hint';
-  document.getElementById('wc').textContent = '';
-  document.getElementById('manualText').value = '';
-  setStatus('', 'Klar til registrering');
+  document.getElementById('live').innerHTML='';
+  document.getElementById('hint').style.display='inline';
+  document.getElementById('hint').textContent='Det du sier transkribers her i sanntid...';
+  document.getElementById('hint').className='hint';
+  document.getElementById('wc').textContent='';
+  document.getElementById('manualText').value='';
+  setStatus('','Klar til registrering');
 }
 
 // ============================================================
 // FORM
 // ============================================================
 function togTag(el) { el.classList.toggle('on'); }
-
 function setSev(s) {
-  curSev = s;
-  ['low', 'mid', 'high'].forEach(function(k) {
-    document.getElementById('sev-' + k).className = 'sev-btn' + (s === k ? ' on-' + k : '');
-  });
+  curSev=s;
+  ['low','mid','high'].forEach(function(k){ document.getElementById('sev-'+k).className='sev-btn'+(s===k?' on-'+k:''); });
 }
-
 function clearForm() {
   ['f-merd','f-art','f-vekt','f-antall','f-dod','f-dodpst','f-temp','f-o2',
    'f-lhv','f-lbev','f-lfas','f-ltot','f-prove','f-proven','f-lab','f-haste',
-   'f-vurd','f-tiltak','f-merk','f-kons'].forEach(function(id) {
-    var el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('ai'); }
+   'f-vurd','f-tiltak','f-merk','f-kons'].forEach(function(id){
+    var el=document.getElementById(id); if(el){el.value='';el.classList.remove('ai');}
   });
-  document.querySelectorAll('.tags .tag').forEach(function(t) { t.classList.remove('on'); });
-  ['low','mid','high'].forEach(function(k) { document.getElementById('sev-' + k).className = 'sev-btn'; });
-  curSev = '';
-  toast('Skjema tømt');
+  document.querySelectorAll('.tags .tag').forEach(function(t){t.classList.remove('on');});
+  ['low','mid','high'].forEach(function(k){document.getElementById('sev-'+k).className='sev-btn';});
+  curSev=''; toast('Skjema tømt');
 }
-
 function getFormData() {
-  var symp = Array.from(document.querySelectorAll('.tags .tag.on')).map(function(t) { return t.textContent.trim(); });
+  var symp=Array.from(document.querySelectorAll('.tags .tag.on')).map(function(t){return t.textContent.trim();});
   return {
-    lokalitet: document.getElementById('f-lok').value,
-    konsesjon: document.getElementById('f-kons').value,
-    gps:       document.getElementById('f-gps').value,
-    biolog:    document.getElementById('f-bio').value,
-    dato:      document.getElementById('f-dato').value,
-    tid:       document.getElementById('f-tid').value,
-    merd:      document.getElementById('f-merd').value,
-    art:       document.getElementById('f-art').value,
-    snittvekt: document.getElementById('f-vekt').value,
-    antall:    document.getElementById('f-antall').value,
-    dod_fisk:  document.getElementById('f-dod').value,
-    dod_pst:   document.getElementById('f-dodpst').value,
-    temp:      document.getElementById('f-temp').value,
-    o2:        document.getElementById('f-o2').value,
-    lus_hv:    document.getElementById('f-lhv').value,
-    lus_bev:   document.getElementById('f-lbev').value,
-    lus_fas:   document.getElementById('f-lfas').value,
-    lus_tot:   document.getElementById('f-ltot').value,
-    prove:     document.getElementById('f-prove').value,
-    prove_n:   document.getElementById('f-proven').value,
-    lab:       document.getElementById('f-lab').value,
-    haste:     document.getElementById('f-haste').value,
-    symptomer: symp,
-    alvorlighet: curSev,
-    vurdering: document.getElementById('f-vurd').value,
-    tiltak:    document.getElementById('f-tiltak').value,
-    merknad:   document.getElementById('f-merk').value
+    lokalitet:document.getElementById('f-lok').value,
+    konsesjon:document.getElementById('f-kons').value,
+    gps:document.getElementById('f-gps').value,
+    biolog:document.getElementById('f-bio').value,
+    dato:document.getElementById('f-dato').value,
+    tid:document.getElementById('f-tid').value,
+    merd:document.getElementById('f-merd').value,
+    art:document.getElementById('f-art').value,
+    snittvekt:document.getElementById('f-vekt').value,
+    antall:document.getElementById('f-antall').value,
+    dod_fisk:document.getElementById('f-dod').value,
+    dod_pst:document.getElementById('f-dodpst').value,
+    temp:document.getElementById('f-temp').value,
+    o2:document.getElementById('f-o2').value,
+    lus_hv:document.getElementById('f-lhv').value,
+    lus_bev:document.getElementById('f-lbev').value,
+    lus_fas:document.getElementById('f-lfas').value,
+    lus_tot:document.getElementById('f-ltot').value,
+    prove:document.getElementById('f-prove').value,
+    prove_n:document.getElementById('f-proven').value,
+    lab:document.getElementById('f-lab').value,
+    haste:document.getElementById('f-haste').value,
+    symptomer:symp,
+    alvorlighet:curSev,
+    vurdering:document.getElementById('f-vurd').value,
+    tiltak:document.getElementById('f-tiltak').value,
+    merknad:document.getElementById('f-merk').value
   };
 }
 
 // ============================================================
 // STORAGE OPERATIONS
 // ============================================================
-// Save raw transcript as a draft entry immediately when recording stops
-function saveRawTranscript(text) {
-  var a = getE();
-  // Replace last entry if it was a draft from same session (within 5 sec)
-  var now = Date.now();
-  if (a.length > 0 && a[0].draft && (now - a[0].id) < 5000) {
-    a.shift(); // remove previous draft
+function saveRaw(text) {
+  var a=getE();
+  a.unshift({id:Date.now(),ts:new Date().toISOString(),data:getFormData(),raw:text,status:'pending',draft:true});
+  putE(a); renderLog();
+  toast('Opptak lagret ('+text.split(' ').length+' ord)');
+}
+
+function updateDraftEntry() {
+  var entries=getE();
+  if (entries.length>0&&entries[0].draft) {
+    entries[0].data=getFormData();
+    entries[0].raw=lastParsed._raw||entries[0].raw;
+    entries[0].draft=false;
+    putE(entries); renderLog();
+  } else {
+    saveEntry(true);
   }
-  a.unshift({
-    id: now,
-    ts: new Date().toISOString(),
-    data: getFormData(),
-    raw: text,
-    status: 'pending',
-    draft: true
-  });
-  putE(a);
-  renderLog();
-  toast('Opptak lagret (' + text.split(' ').length + ' ord)');
 }
 
 function saveEntry(silent) {
-  var a = getE();
-  var rawText = (lastParsed && lastParsed._raw) ? lastParsed._raw : '';
-  a.unshift({ id: Date.now(), ts: new Date().toISOString(), data: getFormData(), raw: rawText, status: 'pending' });
-  putE(a);
-  renderLog();
-  if (!silent) toast('Lagret (' + a.length + ' totalt)');
+  var a=getE();
+  var raw=(lastParsed&&lastParsed._raw)?lastParsed._raw:'';
+  a.unshift({id:Date.now(),ts:new Date().toISOString(),data:getFormData(),raw:raw,status:'pending'});
+  putE(a); renderLog();
+  if (!silent) toast('Lagret ('+a.length+' totalt)');
   if (navigator.onLine) autoSync();
 }
 
 function autoSync() {
-  putE(getE().map(function(e) { return Object.assign({}, e, { status: 'synced' }); }));
+  putE(getE().map(function(e){return Object.assign({},e,{status:'synced'});}));
   renderLog();
 }
-
 function syncAll() {
-  if (!navigator.onLine) { toast('Ikke tilkoblet'); return; }
-  autoSync(); toast('Synkronisert');
+  if (!navigator.onLine){toast('Ikke tilkoblet');return;}
+  autoSync(); toast('Synkronisert ✓');
 }
 
 // ============================================================
-// LOG / HISTORIKK
+// LOG
 // ============================================================
 function renderLog() {
   renderCorrections();
-  var entries = getE();
-  var today = new Date().toISOString().slice(0, 10);
-  document.getElementById('st-tot').textContent  = entries.length;
-  document.getElementById('st-day').textContent  = entries.filter(function(e) { return e.ts.slice(0, 10) === today; }).length;
-  document.getElementById('st-pend').textContent = entries.filter(function(e) { return e.status === 'pending'; }).length;
-
-  var list = document.getElementById('logList');
-  if (!entries.length) {
-    list.innerHTML = '<p style="color:#aaa;font-size:13px;text-align:center;padding:20px 0;">Ingen registreringer ennå</p>';
-    return;
-  }
-  list.innerHTML = entries.map(function(e, i) {
-    var d = e.data;
-    var title = [d.lokalitet, d.merd && ('Merd ' + d.merd), d.art].filter(Boolean).join(' · ') || 'Registrering';
-    var sub   = [d.snittvekt && (d.snittvekt + ' kg'), d.dod_fisk && (d.dod_fisk + ' dødfisk'), d.biolog].filter(Boolean).join(' · ');
-    var time  = new Date(e.ts).toLocaleString('nb-NO', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-    return '<div class="log-item" onclick="openEntry(' + i + ')">'
-      + '<div class="log-dot ' + e.status + '"></div>'
-      + '<div class="log-info">'
-        + '<div class="log-title">' + title + '</div>'
-        + (sub ? '<div class="log-sub">' + sub + '</div>' : '')
-      + '</div>'
-      + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;">'
-        + '<span style="font-size:11px;color:#aaa;">' + time + '</span>'
-        + '<span class="log-badge ' + (e.status === 'synced' ? 'lb-s' : 'lb-p') + '">' + (e.status === 'synced' ? 'Synkronisert' : 'Venter') + '</span>'
-      + '</div>'
-      + '<span style="color:#ccc;font-size:18px;padding-left:4px;">&#8250;</span>'
-      + '</div>';
+  var entries=getE();
+  var today=new Date().toISOString().slice(0,10);
+  document.getElementById('st-tot').textContent=entries.length;
+  document.getElementById('st-day').textContent=entries.filter(function(e){return e.ts.slice(0,10)===today;}).length;
+  document.getElementById('st-pend').textContent=entries.filter(function(e){return e.status==='pending';}).length;
+  var list=document.getElementById('logList');
+  if (!entries.length){list.innerHTML='<p style="color:#aaa;font-size:13px;text-align:center;padding:20px 0;">Ingen registreringer ennå</p>';return;}
+  list.innerHTML=entries.map(function(e,i){
+    var d=e.data;
+    var title=[d.lokalitet,d.merd&&('Merd '+d.merd),d.art].filter(Boolean).join(' · ')||(e.raw?e.raw.slice(0,40)+'...':' Registrering');
+    var sub=[d.snittvekt&&(d.snittvekt+' kg'),d.dod_fisk&&(d.dod_fisk+' dødfisk'),d.biolog].filter(Boolean).join(' · ');
+    if (!sub&&e.raw) sub=e.raw.slice(0,60);
+    var time=new Date(e.ts).toLocaleString('nb-NO',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    var badge=e.draft?'<span class="log-badge" style="background:#fff8e1;color:#f57f17;">Utkast</span>':'<span class="log-badge '+( e.status==='synced'?'lb-s':'lb-p')+'">'+( e.status==='synced'?'Synkronisert':'Venter')+'</span>';
+    return '<div class="log-item" onclick="openEntry('+i+')">'
+      +'<div class="log-dot '+(e.draft?'pending':e.status)+'"></div>'
+      +'<div class="log-info">'
+        +'<div class="log-title">'+title+'</div>'
+        +(sub?'<div class="log-sub">'+sub+'</div>':'')
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;">'
+        +'<span style="font-size:11px;color:#aaa;">'+time+'</span>'
+        +badge
+      +'</div>'
+      +'<span style="color:#ccc;font-size:18px;padding-left:4px;">&#8250;</span>'
+      +'</div>';
   }).join('');
 }
 
@@ -1017,247 +945,174 @@ function renderLog() {
 // ENTRY DETAIL
 // ============================================================
 function openEntry(idx) {
-  curEntryIdx = idx;
-  var e = getE()[idx];
-  if (!e) return;
-  var d = e.data;
-  var title = [d.lokalitet, d.merd && ('Merd ' + d.merd), d.art].filter(Boolean).join(' · ') || 'Registrering';
-  document.getElementById('em-title').textContent = title;
-  document.getElementById('em-raw').value = e.raw || '';
-
-  var fields = [
-    { l: 'Dato/tid',    v: d.dato + ' ' + d.tid },
-    { l: 'Lokalitet',   v: d.lokalitet },
-    { l: 'Biolog',      v: d.biolog },
-    { l: 'Merd',        v: d.merd },
-    { l: 'Art',         v: d.art },
-    { l: 'Snittvekt',   v: d.snittvekt ? d.snittvekt + ' kg' : '' },
-    { l: 'Ant. fisk',   v: d.antall },
-    { l: 'Dødfisk',    v: d.dod_fisk ? d.dod_fisk + (d.dod_pst ? ' (' + d.dod_pst + '%)' : '') : '' },
-    { l: 'Temp',        v: d.temp ? d.temp + ' C' : '' },
-    { l: 'O2',          v: d.o2 ? d.o2 + ' mg/L' : '' },
-    { l: 'Lus hv/bev/fas', v: [d.lus_hv, d.lus_bev, d.lus_fas].filter(Boolean).join(' / ') },
-    { l: 'Proeve',      v: d.prove },
-    { l: 'Lab',         v: d.lab },
-    { l: 'Alvorlighet', v: d.alvorlighet },
-    { l: 'Symptomer',   v: (d.symptomer || []).join(', ') },
-    { l: 'Vurdering',   v: d.vurdering },
-    { l: 'Tiltak',      v: d.tiltak }
-  ].filter(function(f) { return f.v && String(f.v).trim(); });
-
-  document.getElementById('em-fields').innerHTML = fields.map(function(f) {
-    return '<div class="field-row"><span class="field-key">' + f.l + '</span><span class="field-val">' + f.v + '</span></div>';
+  curEntryIdx=idx;
+  var e=getE()[idx]; if(!e) return;
+  var d=e.data;
+  var title=[d.lokalitet,d.merd&&('Merd '+d.merd),d.art].filter(Boolean).join(' · ')||(e.raw?e.raw.slice(0,40)+'...':' Registrering');
+  document.getElementById('em-title').textContent=title;
+  document.getElementById('em-raw').value=e.raw||'';
+  var fields=[
+    {l:'Dato/tid',v:d.dato+' '+d.tid},
+    {l:'Lokalitet',v:d.lokalitet},
+    {l:'Biolog',v:d.biolog},
+    {l:'Merd',v:d.merd},
+    {l:'Art',v:d.art},
+    {l:'Snittvekt',v:d.snittvekt?d.snittvekt+' kg':''},
+    {l:'Ant. fisk',v:d.antall},
+    {l:'Dødfisk',v:d.dod_fisk?(d.dod_fisk+(d.dod_pst?' ('+d.dod_pst+'%)':'')):''},
+    {l:'Temp',v:d.temp?d.temp+' °C':''},
+    {l:'O2',v:d.o2?d.o2+' mg/L':''},
+    {l:'Lus hv/bev/fas',v:[d.lus_hv,d.lus_bev,d.lus_fas].filter(Boolean).join(' / ')},
+    {l:'Prøve',v:d.prove},
+    {l:'Lab',v:d.lab},
+    {l:'Alvorlighet',v:d.alvorlighet},
+    {l:'Symptomer',v:(d.symptomer||[]).join(', ')},
+    {l:'Vurdering',v:d.vurdering},
+    {l:'Tiltak',v:d.tiltak}
+  ].filter(function(f){return f.v&&String(f.v).trim();});
+  document.getElementById('em-fields').innerHTML=fields.map(function(f){
+    return '<div class="field-row"><span class="field-key">'+f.l+'</span><span class="field-val">'+f.v+'</span></div>';
   }).join('');
-
-  document.getElementById('optResult').className = 'opt-result';
-  document.getElementById('optBtn').textContent = 'Optimaliser med Claude';
-  document.getElementById('optBtn').disabled = false;
+  document.getElementById('optResult').className='opt-result';
+  document.getElementById('optBtn').textContent='✦ Optimaliser med Gemini';
+  document.getElementById('optBtn').disabled=false;
   document.getElementById('entryModal').classList.add('open');
 }
-
-function closeEntry() {
-  document.getElementById('entryModal').classList.remove('open');
-  curEntryIdx = -1;
+function closeEntry(){document.getElementById('entryModal').classList.remove('open');curEntryIdx=-1;}
+function saveEntryEdit(){
+  var entries=getE(); if(curEntryIdx<0||!entries[curEntryIdx]) return;
+  entries[curEntryIdx].raw=document.getElementById('em-raw').value;
+  putE(entries); closeEntry(); renderLog(); toast('Lagret');
 }
-
-function saveEntryEdit() {
-  var entries = getE();
-  if (curEntryIdx < 0 || !entries[curEntryIdx]) return;
-  entries[curEntryIdx].raw = document.getElementById('em-raw').value;
-  putE(entries);
+function reanalyze(){
+  var raw=document.getElementById('em-raw').value.trim();
+  if(!raw){toast('Ingen tekst å analysere');return;}
+  if(!geminiKey){openKeyModal();return;}
   closeEntry();
-  renderLog();
-  toast('Lagret');
-}
-
-function reanalyze() {
-  var raw = document.getElementById('em-raw').value.trim();
-  if (!raw) { toast('Ingen tekst å analysere'); return; }
-  if (!anthroKey) { openKeyModal(); return; }
-  closeEntry();
-  showLive(raw, '');
-  setStatus('processing', 'Re-analyserer...');
-  callClaude(raw);
+  showLive(raw,'');
+  setStatus('processing','Re-analyserer...');
+  callGemini(raw);
   document.querySelectorAll('.tab')[0].click();
 }
-
-function deleteEntry() {
-  if (!confirm('Slett denne registreringen?')) return;
-  var entries = getE();
-  entries.splice(curEntryIdx, 1);
-  putE(entries);
-  closeEntry();
-  renderLog();
-  toast('Slettet');
+function deleteEntry(){
+  if(!confirm('Slett denne registreringen?')) return;
+  var entries=getE(); entries.splice(curEntryIdx,1); putE(entries);
+  closeEntry(); renderLog(); toast('Slettet');
 }
-
-async function optimizeEntry() {
-  var entries = getE();
-  var e = entries[curEntryIdx];
-  if (!e || !anthroKey) { if (!anthroKey) openKeyModal(); return; }
-
-  var btn = document.getElementById('optBtn');
-  btn.textContent = 'Analyserer...'; btn.disabled = true;
-
-  var sys = 'Du er en erfaren fiskehelsebiolog. Gjennomgå feltregistreringen og gi en optimalisert analyse.\n\n'
-    + 'Gjør følgende:\n'
-    + '1. Fyll inn manglende felt basert på klinisk kontekst\n'
-    + '2. Foreslå differensialdiagnoser hvis ikke angitt\n'
-    + '3. Skriv strukturert klinisk vurdering\n'
-    + '4. Foreslå konkrete tiltak\n'
-    + '5. Korriger inkonsistenser\n'
-    + '6. Beregn dødelighet % hvis mulig\n'
-    + '7. Vurder rapporteringsplikt\n\n'
-    + 'Svar på norsk med klare seksjoner.';
-
-  var body = 'Feltdata:\n' + JSON.stringify(e.data, null, 2) + (e.raw ? '\n\nRå transkripsjon:\n' + e.raw : '');
-
+async function optimizeEntry(){
+  var entries=getE(); var e=entries[curEntryIdx];
+  if(!e||!geminiKey){if(!geminiKey)openKeyModal();return;}
+  var btn=document.getElementById('optBtn');
+  btn.textContent='Analyserer...'; btn.disabled=true;
+  var sys='Du er en erfaren fiskehelsebiolog. Gjennomgå feltregistreringen og gi en komplett optimalisert analyse.\n\n'
+    +'Gjør følgende:\n'
+    +'1. Fyll inn manglende felt basert på klinisk kontekst\n'
+    +'2. Foreslå differensialdiagnoser\n'
+    +'3. Skriv strukturert klinisk vurdering\n'
+    +'4. Foreslå konkrete tiltak\n'
+    +'5. Vurder rapporteringsplikt\n'
+    +'6. Beregn dødelighet % hvis mulig\n\n'
+    +'Svar på norsk med klare seksjoner.';
+  var body={contents:[{parts:[{text:sys+'\n\nFeltdata:\n'+JSON.stringify(e.data,null,2)+(e.raw?'\n\nRå transkripsjon:\n'+e.raw:'')}]}],generationConfig:{temperature:0.3,maxOutputTokens:1500}};
   try {
-    var res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthroKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        system: sys,
-        messages: [{ role: 'user', content: body }]
-      })
-    });
-    var d = await res.json();
-    if (d.error) throw new Error(d.error.message);
-    var el = document.getElementById('optResult');
-    el.textContent = d.content[0].text;
-    el.className = 'opt-result show';
-    btn.textContent = 'Optimalisert';
-  } catch(err) {
-    btn.textContent = 'Feil — prøv igjen';
-    btn.disabled = false;
-    toast('Feil: ' + err.message.slice(0, 50));
-  }
+    var res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+geminiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    var d=await res.json();
+    if(d.error) throw new Error(d.error.message);
+    var el=document.getElementById('optResult');
+    el.textContent=d.candidates[0].content.parts[0].text;
+    el.className='opt-result show';
+    btn.textContent='Optimalisert ✓';
+  } catch(err){btn.textContent='Feil — prøv igjen';btn.disabled=false;toast('Feil: '+err.message.slice(0,50));}
 }
 
 // ============================================================
 // EXPORT
 // ============================================================
-var EXP = {
-  vi:  { k1: 'Vekt',               k2: 'Antall døde', fmt: 'PDF -- Veterinærinstituttet', btn: 'Send til Veterinærinstituttet' },
-  pat: { k1: 'Biomasse-indikator', k2: 'Mortality',    fmt: 'API — Patogen AS',            btn: 'Send via Patogen API' },
-  phq: { k1: 'Weight (kg)',        k2: 'Loss',          fmt: 'JSON — PHARMAQ',              btn: 'Eksporter til PHARMAQ' },
-  ba:  { k1: 'avg_weight',         k2: 'dead_count',    fmt: 'API — Blue Analytics',        btn: 'Send til Blue Analytics' }
+var EXP={
+  vi:{k1:'Vekt',k2:'Antall døde',fmt:'PDF — Veterinærinstituttet',btn:'Send til Veterinærinstituttet'},
+  pat:{k1:'Biomasse-indikator',k2:'Mortality',fmt:'API — Patogen AS',btn:'Send via Patogen API'},
+  phq:{k1:'Weight (kg)',k2:'Loss',fmt:'JSON — PHARMAQ',btn:'Eksporter til PHARMAQ'},
+  ba:{k1:'avg_weight',k2:'dead_count',fmt:'API — Blue Analytics',btn:'Send til Blue Analytics'}
 };
-
-function pickExp(key, el) {
-  curExp = key;
-  document.querySelectorAll('.exp-card').forEach(function(c) { c.classList.remove('on'); });
-  el.classList.add('on');
-  renderPreview();
+function pickExp(key,el){curExp=key;document.querySelectorAll('.exp-card').forEach(function(c){c.classList.remove('on');});el.classList.add('on');renderPreview();}
+function renderPreview(){
+  var d=getFormData(),c=EXP[curExp];
+  document.getElementById('previewBox').innerHTML=
+    '<span class="pk">'+c.k1+':</span> '+(d.snittvekt||'--')+'<br>'
+    +'<span class="pk">'+c.k2+':</span> '+(d.dod_fisk||'--')+'<br>'
+    +'<span class="pk">Lokalitet:</span> '+(d.lokalitet||'--')+'<br>'
+    +'<span class="pk">Merd:</span> '+(d.merd||'--')+'<br>'
+    +'<span class="pk">Art:</span> '+(d.art||'--')+'<br>'
+    +'<span class="pk">Biolog:</span> '+(d.biolog||'--')+'<br>'
+    +'<span class="pk">Dato:</span> '+(d.dato||'--')+'<br>'
+    +'<span class="pk">Symptomer:</span> '+(d.symptomer.slice(0,4).join(', ')||'--')+'<br>'
+    +'<span class="pk">Format:</span> '+c.fmt;
+  document.getElementById('sendBtn').textContent=c.btn;
 }
-
-function renderPreview() {
-  var d = getFormData(), c = EXP[curExp];
-  document.getElementById('previewBox').innerHTML =
-    '<span class="pk">' + c.k1 + ':</span> ' + (d.snittvekt || '--') + '<br>'
-    + '<span class="pk">' + c.k2 + ':</span> ' + (d.dod_fisk || '--') + '<br>'
-    + '<span class="pk">Lokalitet:</span> ' + (d.lokalitet || '--') + '<br>'
-    + '<span class="pk">Merd:</span> ' + (d.merd || '--') + '<br>'
-    + '<span class="pk">Art:</span> ' + (d.art || '--') + '<br>'
-    + '<span class="pk">Biolog:</span> ' + (d.biolog || '--') + '<br>'
-    + '<span class="pk">Dato:</span> ' + (d.dato || '--') + '<br>'
-    + '<span class="pk">Symptomer:</span> ' + (d.symptomer.slice(0, 4).join(', ') || '--') + '<br>'
-    + '<span class="pk">Format:</span> ' + c.fmt;
-  document.getElementById('sendBtn').textContent = c.btn;
-}
-
-function sendReport() {
-  var btn = document.getElementById('sendBtn');
-  btn.textContent = 'Sender...'; btn.disabled = true;
+function sendReport(){
+  var btn=document.getElementById('sendBtn');
+  btn.textContent='Sender...';btn.disabled=true;
   saveEntry(true);
-  setTimeout(function() {
-    btn.style.background = '#085041'; btn.textContent = 'Sendt!';
-    setTimeout(function() { btn.style.background = ''; btn.disabled = false; renderPreview(); }, 2500);
-  }, 900);
+  setTimeout(function(){
+    btn.style.background='#085041';btn.textContent='Sendt! ✓';
+    setTimeout(function(){btn.style.background='';btn.disabled=false;renderPreview();},2500);
+  },900);
 }
 
 // ============================================================
 // VOCAB LEARNING
 // ============================================================
-function learnWord() {
-  var wrong   = document.getElementById('cv-wrong').value.trim();
-  var correct = document.getElementById('cv-right').value.trim();
-  if (!wrong || !correct) { toast('Fyll inn begge felt'); return; }
-  var cv = getCustomVocab();
-  cv[wrong.toLowerCase()] = correct;
-  saveCustomVocab(cv);
-  document.getElementById('cv-wrong').value = '';
-  document.getElementById('cv-right').value = '';
-  renderCorrections();
-  toast('Husket: "' + wrong + '"" → "' + correct + '"');
+function learnWord(){
+  var wrong=document.getElementById('cv-wrong').value.trim();
+  var right=document.getElementById('cv-right').value.trim();
+  if(!wrong||!right){toast('Fyll inn begge felt');return;}
+  var cv=getCustomVocab(); cv[wrong.toLowerCase()]=right; saveCustomVocab(cv);
+  document.getElementById('cv-wrong').value=''; document.getElementById('cv-right').value='';
+  renderCorrections(); toast('"'+ wrong +'" → "'+right+'" lagret');
 }
-
-function renderCorrections() {
-  var cv = getCustomVocab();
-  var keys = Object.keys(cv);
-  var el = document.getElementById('cv-list');
-  if (!el) return;
-  if (!keys.length) { el.innerHTML = ''; return; }
-  el.innerHTML = '<div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Lagrede rettelser</div>'
-    + keys.map(function(k) {
+function renderCorrections(){
+  var cv=getCustomVocab(); var keys=Object.keys(cv);
+  var el=document.getElementById('cv-list'); if(!el) return;
+  if(!keys.length){el.innerHTML='';return;}
+  el.innerHTML='<div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Lagrede rettelser</div>'
+    +keys.map(function(k){
       return '<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#f8f7f4;border-radius:8px;margin-bottom:6px;font-size:13px;">'
-        + '<span style="flex:1;color:#555;">"' + k + '"</span>'
-        + '<span style="color:#aaa;">&#8594;</span>'
-        + '<span style="flex:1;color:#0F6E56;font-weight:500;">"' + cv[k] + '"</span>'
-        + '<span onclick="delCorrection(\'' + k + '\')" style="cursor:pointer;color:#ccc;font-size:20px;padding:0 4px;">&#215;</span>'
-        + '</div>';
+        +'<span style="flex:1;color:#555;">"'+ k +'"</span>'
+        +'<span style="color:#aaa;">&#8594;</span>'
+        +'<span style="flex:1;color:#0F6E56;font-weight:500;">"'+ cv[k] +'"</span>'
+        +'<span onclick="delCorr(\''+k+'\')" style="cursor:pointer;color:#ccc;font-size:20px;padding:0 4px;">&#215;</span>'
+        +'</div>';
     }).join('');
 }
-
-function delCorrection(key) {
-  var cv = getCustomVocab();
-  delete cv[key];
-  saveCustomVocab(cv);
-  renderCorrections();
-  toast('Rettelse slettet');
-}
+function delCorr(key){var cv=getCustomVocab();delete cv[key];saveCustomVocab(cv);renderCorrections();toast('Rettelse slettet');}
 
 // ============================================================
 // KEY MODAL
 // ============================================================
-function openKeyModal() {
-  document.getElementById('k-ant').value = anthroKey;
-  document.getElementById('k-oai').value = openaiKey;
-  document.getElementById('keyModal').classList.add('open');
+function openKeyModal(){document.getElementById('k-gem').value=geminiKey;document.getElementById('k-oai').value=openaiKey;document.getElementById('keyModal').classList.add('open');}
+function closeKeyModal(){document.getElementById('keyModal').classList.remove('open');}
+function saveKeys(){
+  geminiKey=document.getElementById('k-gem').value.trim();
+  openaiKey=document.getElementById('k-oai').value.trim();
+  lsSet('fa_gem',geminiKey); lsSet('fa_o',openaiKey);
+  closeKeyModal(); updateKeyBtn(); detectEngine();
+  document.getElementById('setupBanner').style.display=geminiKey?'none':'block';
+  toast('Nøkler lagret — aldri spørres igjen');
 }
-function closeKeyModal() { document.getElementById('keyModal').classList.remove('open'); }
-function saveKeys() {
-  anthroKey = document.getElementById('k-ant').value.trim();
-  openaiKey = document.getElementById('k-oai').value.trim();
-  lsSet('fa_k', anthroKey);
-  lsSet('fa_o', openaiKey);
-  closeKeyModal();
-  updateKeyBtn();
-  detectEngine();
-  toast('Nøkler lagret');
-}
-function updateKeyBtn() {
-  var el = document.getElementById('keyBtn');
-  el.className = 'icon-btn' + ((anthroKey || openaiKey) ? ' set' : '');
+function updateKeyBtn(){
+  var el=document.getElementById('keyBtn');
+  el.className='icon-btn'+((geminiKey||openaiKey)?' set':'');
 }
 
 // ============================================================
 // TOAST
 // ============================================================
 var toastT;
-function toast(msg) {
-  var el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
   clearTimeout(toastT);
-  toastT = setTimeout(function() { el.classList.remove('show'); }, 2800);
+  toastT=setTimeout(function(){el.classList.remove('show');},2800);
 }
 </script>
 </body>
