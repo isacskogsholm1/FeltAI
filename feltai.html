@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FeltAI</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: #f4f3ef; color: #1a1a18; min-height: 100vh; }
+.topbar { background: #fff; border-bottom: 1px solid #e5e3de; padding: 0 16px; height: 52px; display: flex; align-items: center; justify-content: space-between; }
+.logo { background: #1D9E75; color: #fff; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+.api-btn { font-size: 13px; padding: 6px 12px; border-radius: 8px; border: 1px solid #d0cec8; background: #f4f3ef; cursor: pointer; color: #555; }
+.api-btn.set { background: #e1f5ee; border-color: #5DCAA5; color: #0F6E56; }
+.tabs { background: #fff; border-bottom: 1px solid #e5e3de; display: flex; padding: 0 16px; overflow-x: auto; }
+.tab { padding: 12px 16px; font-size: 13px; cursor: pointer; color: #888; border-bottom: 2px solid transparent; white-space: nowrap; }
+.tab.active { color: #1D9E75; border-bottom-color: #1D9E75; font-weight: 500; }
+.page { display: none; padding: 16px; max-width: 640px; margin: 0 auto; }
+.page.active { display: block; }
+.card { background: #fff; border: 1px solid #e5e3de; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+.card-title { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 14px; }
+
+/* Mic */
+.mic-center { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 8px 0 18px; }
+#micBtn { width: 80px; height: 80px; border-radius: 50%; background: #1D9E75; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+#micBtn.on { background: #D85A30; animation: pulse 1.2s infinite; }
+#micBtn:disabled { background: #ccc; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(216,90,48,.35)} 60%{box-shadow:0 0 0 16px rgba(216,90,48,0)} }
+#micBtn svg { width: 32px; height: 32px; fill: #fff; }
+#micLabel { font-size: 13px; color: #777; text-align: center; max-width: 260px; line-height: 1.5; }
+.engine-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: #f4f3ef; border: 1px solid #e5e3de; color: #888; }
+
+/* Transcript */
+.tbox { background: #f4f3ef; border-radius: 8px; padding: 14px; min-height: 72px; font-size: 14px; line-height: 1.7; }
+.hint { color: #bbb; font-style: italic; }
+.interim { color: #aaa; }
+
+/* AI result */
+.ai-result { display: none; margin-top: 12px; background: #e1f5ee; border: 1px solid #9FE1CB; border-radius: 8px; padding: 14px; }
+.ai-result.show { display: block; }
+.ai-label { font-size: 11px; font-weight: 700; color: #085041; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.ai-summary { font-size: 14px; color: #0F6E56; margin-bottom: 12px; line-height: 1.5; }
+.ai-actions { display: flex; gap: 8px; }
+.btn-use { background: #1D9E75; color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn-skip { background: transparent; color: #888; border: 1px solid #d0cec8; border-radius: 8px; padding: 9px 14px; font-size: 14px; cursor: pointer; }
+
+.alert-box { display: none; background: #faece7; border: 1px solid #F0997B; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; font-size: 13px; color: #993C1D; line-height: 1.5; }
+.alert-box.show { display: block; }
+
+/* Manual */
+.divider { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e3de; }
+.manual-area { width: 100%; background: transparent; border: none; outline: none; font-size: 15px; font-family: inherit; color: #1a1a18; resize: none; min-height: 72px; }
+.btn-analyze { margin-top: 10px; width: 100%; padding: 13px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+
+/* Form */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.fg.full { grid-column: 1/-1; }
+.fg label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: .05em; }
+.fg input, .fg textarea { font-size: 15px; padding: 10px 12px; border-radius: 8px; border: 1px solid #d0cec8; background: #fff; color: #1a1a18; outline: none; font-family: inherit; }
+.fg input:focus, .fg textarea:focus { border-color: #1D9E75; }
+.fg input.ai { border-color: #5DCAA5; background: #e1f5ee; }
+.sep { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: .06em; grid-column: 1/-1; padding-top: 8px; border-top: 1px solid #e5e3de; margin-top: 4px; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { font-size: 13px; padding: 6px 14px; border-radius: 20px; border: 1px solid #d0cec8; background: #f4f3ef; color: #666; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+.tag.on { background: #1D9E75; color: #fff; border-color: #1D9E75; }
+.form-actions { display: flex; gap: 10px; margin-top: 4px; }
+.btn-save { flex: 1; padding: 13px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.btn-clear { padding: 13px 18px; background: #f4f3ef; color: #666; border: 1px solid #d0cec8; border-radius: 8px; font-size: 15px; cursor: pointer; }
+
+/* Export */
+.export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.exp-card { background: #fff; border: 1px solid #e5e3de; border-radius: 12px; padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.exp-card.on { border: 2px solid #1D9E75; }
+.exp-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.exp-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
+.b-pdf { background: #faece7; color: #993C1D; }
+.b-api { background: #e6f1fb; color: #185FA5; }
+.b-json { background: #eaf3de; color: #3B6D11; }
+.exp-desc { font-size: 12px; color: #888; }
+.preview { background: #f4f3ef; border-radius: 8px; padding: 14px; font-size: 13px; font-family: monospace; line-height: 2; margin-bottom: 14px; }
+.pk { color: #0F6E56; }
+.btn-send { width: 100%; padding: 13px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.btn-send.ok { background: #085041; }
+
+/* Log */
+.log-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #f4f3ef; border-radius: 8px; border: 1px solid #e5e3de; margin-bottom: 8px; }
+.log-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.log-dot.synced { background: #1D9E75; }
+.log-dot.pending { background: #BA7517; }
+.log-text { flex: 1; font-size: 13px; }
+.log-meta { font-size: 11px; color: #aaa; }
+.log-badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+.lb-s { background: #e1f5ee; color: #0F6E56; }
+.lb-p { background: #faeeda; color: #854F0B; }
+
+/* Modal */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 99; align-items: center; justify-content: center; padding: 20px; }
+.overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 16px; padding: 24px; width: 100%; max-width: 420px; }
+.modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.modal p { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 14px; }
+.modal-section { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.modal input { width: 100%; padding: 10px 12px; border: 1px solid #d0cec8; border-radius: 8px; font-size: 14px; font-family: monospace; outline: none; margin-bottom: 14px; }
+.modal input:focus { border-color: #1D9E75; }
+.modal-btns { display: flex; gap: 8px; }
+.modal-btns button { flex: 1; padding: 11px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: inherit; }
+.btn-cancel { background: #f4f3ef; border: 1px solid #d0cec8; color: #555; }
+.btn-ok { background: #1D9E75; border: none; color: #fff; font-weight: 600; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: #1a1a18; color: #fff; font-size: 13px; padding: 10px 20px; border-radius: 20px; z-index: 200; transition: transform .25s; pointer-events: none; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 400px) {
+  .form-grid, .export-grid { grid-template-columns: 1fr; }
+  .fg.full, .sep { grid-column: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span class="logo">FeltAI</span>
+    <span style="font-size:15px;font-weight:500;">Prøvedokumentasjon</span>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <span id="onlineEl" style="font-size:12px;color:#aaa;"></span>
+    <button class="api-btn" id="apiBtn" onclick="openModal()">Nøkler</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="goTab('stemme',this)">Stemme</div>
+  <div class="tab" onclick="goTab('skjema',this)">Skjema</div>
+  <div class="tab" onclick="goTab('eksport',this)">Eksport</div>
+  <div class="tab" onclick="goTab('logg',this)">Logg</div>
+</div>
+
+<!-- STEMME -->
+<div class="page active" id="page-stemme">
+  <div class="card">
+    <div class="card-title">Stemmeregistrering</div>
+    <div class="alert-box" id="alertBox"></div>
+
+    <div class="mic-center">
+      <button id="micBtn" onclick="toggleMic()">
+        <svg viewBox="0 0 24 24"><path d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm0 2a2 2 0 00-2 2v6a2 2 0 004 0V5a2 2 0 00-2-2zm-7 9h2a5 5 0 0010 0h2a7 7 0 01-6 6.92V21h2v2H9v-2h2v-2.08A7 7 0 015 12z"/></svg>
+      </button>
+      <span id="micLabel">Trykk for å starte</span>
+      <span class="engine-badge" id="engineBadge">Sjekker...</span>
+    </div>
+
+    <div class="tbox">
+      <span class="hint" id="hint">Det du sier dukker opp her...</span>
+      <span id="live"></span>
+    </div>
+
+    <div class="ai-result" id="aiResult">
+      <div class="ai-label">Claude tolket</div>
+      <div class="ai-summary" id="aiSummary"></div>
+      <div class="ai-actions">
+        <button class="btn-use" onclick="useInForm()">Bruk i skjema</button>
+        <button class="btn-skip" onclick="dismissResult()">Forkast</button>
+      </div>
+    </div>
+
+    <div class="divider">
+      <div class="card-title" style="margin-bottom:8px;">Skriv inn manuelt</div>
+      <textarea class="manual-area" id="manualText" rows="3" placeholder="F.eks: Merd 4, snittvekt 2,1 kg, tre dødfisk, blek lever..."></textarea>
+      <button class="btn-analyze" onclick="analyzeManual()">Analyser med Claude</button>
+    </div>
+  </div>
+</div>
+
+<!-- SKJEMA -->
+<div class="page" id="page-skjema">
+  <div class="card">
+    <div class="card-title">Lokasjon og tid</div>
+    <div class="form-grid">
+      <div class="fg"><label>Lokalitet</label><input id="f-lok" value="Brattvær Nord"></div>
+      <div class="fg"><label>GPS</label><input id="f-gps" placeholder="Henter..."></div>
+      <div class="fg"><label>Dato</label><input id="f-dato" type="date"></div>
+      <div class="fg"><label>Tid</label><input id="f-tid" type="time"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Feltmålinger</div>
+    <div class="form-grid">
+      <div class="fg"><label>Merd nr.</label><input id="f-merd" placeholder="—"></div>
+      <div class="fg"><label>Snittvekt (kg)</label><input id="f-vekt" placeholder="—"></div>
+      <div class="fg"><label>Antall dødfisk</label><input id="f-dod" placeholder="—"></div>
+      <div class="fg"><label>Lusenivå</label><input id="f-lus" placeholder="—"></div>
+      <div class="fg"><label>Prøvetype</label><input id="f-prove" placeholder="—"></div>
+      <div class="fg"><label>Vanntemperatur (°C)</label><input id="f-temp" placeholder="—"></div>
+      <div class="sep">Symptomer</div>
+      <div class="fg full">
+        <div class="tags">
+          <span class="tag" onclick="this.classList.toggle('on')">Blek lever</span>
+          <span class="tag" onclick="this.classList.toggle('on')">Gjellelokk normalt</span>
+          <span class="tag" onclick="this.classList.toggle('on')">Sår</span>
+          <span class="tag" onclick="this.classList.toggle('on')">AGD</span>
+          <span class="tag" onclick="this.classList.toggle('on')">Katarakt</span>
+          <span class="tag" onclick="this.classList.toggle('on')">PD</span>
+          <span class="tag" onclick="this.classList.toggle('on')">IHN</span>
+          <span class="tag" onclick="this.classList.toggle('on')">Avmagret</span>
+        </div>
+      </div>
+      <div class="fg full"><label>Fritekst</label><textarea id="f-fri" rows="3" placeholder="Andre observasjoner..."></textarea></div>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button class="btn-clear" onclick="clearForm()">Tøm</button>
+    <button class="btn-save" onclick="saveEntry()">Lagre</button>
+  </div>
+</div>
+
+<!-- EKSPORT -->
+<div class="page" id="page-eksport">
+  <div class="card">
+    <div class="card-title">Velg mottaker</div>
+    <div class="export-grid">
+      <div class="exp-card on" id="ex-vi" onclick="pickExport('vi',this)">
+        <div class="exp-name">Veterinærinstituttet</div>
+        <span class="exp-badge b-pdf">PDF</span>
+        <div class="exp-desc">Norsk offisielt skjema</div>
+      </div>
+      <div class="exp-card" id="ex-pat" onclick="pickExport('pat',this)">
+        <div class="exp-name">Patogen</div>
+        <span class="exp-badge b-api">API</span>
+        <div class="exp-desc">Direkte innsending</div>
+      </div>
+      <div class="exp-card" id="ex-phq" onclick="pickExport('phq',this)">
+        <div class="exp-name">PHARMAQ</div>
+        <span class="exp-badge b-json">JSON</span>
+        <div class="exp-desc">Engelsk terminologi</div>
+      </div>
+      <div class="exp-card" id="ex-ba" onclick="pickExport('ba',this)">
+        <div class="exp-name">Blue Analytics</div>
+        <span class="exp-badge b-api">API</span>
+        <div class="exp-desc">Dataanalyse</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Forhåndsvisning</div>
+    <div class="preview" id="previewBox"></div>
+    <button class="btn-send" id="sendBtn" onclick="sendReport()">Send rapport</button>
+  </div>
+</div>
+
+<!-- LOGG -->
+<div class="page" id="page-logg">
+  <div class="card">
+    <div class="card-title">Lokalt lagrede registreringer</div>
+    <div id="logList"></div>
+  </div>
+  <button class="btn-save" onclick="syncAll()" style="width:100%;margin-top:0;">Synkroniser alle</button>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>API-nøkler</h3>
+    <p>Lagres kun lokalt i denne nettleseren.</p>
+    <div class="modal-section">Anthropic — AI-analyse (påkrevd)</div>
+    <input type="password" id="keyAnthropic" placeholder="sk-ant-...">
+    <div class="modal-section">OpenAI — Whisper stemme på iPhone (valgfritt)</div>
+    <input type="password" id="keyOpenAI" placeholder="sk-...">
+    <p style="font-size:12px;margin-top:-8px;margin-bottom:14px;">Uten OpenAI-nøkkel: bruk tekstfeltet på iPhone.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Avbryt</button>
+      <button class="btn-ok" onclick="saveKeys()">Lagre</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var anthroKey  = localStorage.getItem('fa_key') || '';
+var openaiKey  = localStorage.getItem('fa_oai')  || '';
+var currentExport = 'vi';
+var lastParsed = null;
+
+// Speech state
+var recog       = null;
+var isListening = false;
+var finalText   = '';
+var mediaRec    = null;
+var audioChunks = [];
+var isRecording = false;
+var engine      = 'none'; // 'webspeech' | 'whisper' | 'none'
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  var now = new Date();
+  document.getElementById('f-dato').value = now.toISOString().slice(0,10);
+  document.getElementById('f-tid').value  = now.toTimeString().slice(0,5);
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(p) {
+      document.getElementById('f-gps').value = p.coords.latitude.toFixed(4)+', '+p.coords.longitude.toFixed(4);
+    }, function() { document.getElementById('f-gps').value = 'Ikke tilgjengelig'; });
+  }
+
+  var setOnline = function(v) {
+    var el = document.getElementById('onlineEl');
+    el.textContent = v ? '● Online' : '● Offline';
+    el.style.color  = v ? '#1D9E75' : '#BA7517';
+  };
+  setOnline(navigator.onLine);
+  window.addEventListener('online',  function() { setOnline(true);  autoSync(); });
+  window.addEventListener('offline', function() { setOnline(false); });
+
+  updateApiBtn();
+  detectEngine();
+  renderLog();
+  renderPreview();
+});
+
+// ── Engine detection ──────────────────────────────────────────────────────────
+function detectEngine() {
+  var hasWS  = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
+  var hasMR  = ('MediaRecorder' in window) && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+
+  if (hasWS) {
+    engine = 'webspeech';
+    document.getElementById('engineBadge').textContent = 'Web Speech API';
+  } else if (hasMR) {
+    engine = 'whisper';
+    document.getElementById('engineBadge').textContent = openaiKey ? 'Whisper (OpenAI)' : 'Whisper — legg inn OpenAI-nøkkel';
+    if (!openaiKey) document.getElementById('micLabel').textContent = 'Legg inn OpenAI-nøkkel for stemme, eller bruk tekst';
+  } else {
+    engine = 'none';
+    document.getElementById('micBtn').disabled = true;
+    document.getElementById('engineBadge').textContent = 'Stemme støttes ikke';
+    document.getElementById('micLabel').textContent = 'Bruk tekstfeltet nedenfor';
+  }
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function goTab(name, el) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('page-'+name).classList.add('active');
+  if (name === 'eksport') renderPreview();
+  if (name === 'logg')    renderLog();
+}
+
+// ── Mic toggle ────────────────────────────────────────────────────────────────
+function toggleMic() {
+  if (engine === 'webspeech') {
+    if (isListening) stopWebSpeech(); else startWebSpeech();
+  } else if (engine === 'whisper') {
+    if (!openaiKey) { openModal(); toast('Legg inn OpenAI-nøkkel for stemme'); return; }
+    if (isRecording) stopWhisper(); else startWhisper();
+  }
+}
+
+// ── Web Speech (Chrome desktop) ───────────────────────────────────────────────
+function startWebSpeech() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  finalText   = '';
+  isListening = true;
+  micOn('Opptak pågår — trykk stopp når ferdig');
+  spawnRecog();
+}
+
+function spawnRecog() {
+  if (!isListening) return;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recog = new SR();
+  recog.lang = 'nb-NO';
+  recog.continuous = false;
+  recog.interimResults = true;
+
+  recog.onresult = function(e) {
+    var interim = '';
+    for (var i = e.resultIndex; i < e.results.length; i++) {
+      var t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalText += (finalText ? ' ' : '') + t.trim();
+      else interim = t;
+    }
+    document.getElementById('hint').style.display = 'none';
+    document.getElementById('live').innerHTML = finalText +
+      (interim ? '<span class="interim">'+(finalText?' ':'')+interim+'</span>' : '');
+  };
+  recog.onerror = function(e) {
+    if (e.error === 'not-allowed') { toast('Tillat mikrofon i nettleseren'); isListening = false; micOff(); return; }
+    setTimeout(spawnRecog, 150);
+  };
+  recog.onend = function() { if (isListening) setTimeout(spawnRecog, 80); };
+  try { recog.start(); } catch(e) { setTimeout(spawnRecog, 300); }
+}
+
+function stopWebSpeech() {
+  isListening = false;
+  if (recog) { try { recog.stop(); } catch(e){} recog = null; }
+  micOff();
+  var text = finalText.trim();
+  document.getElementById('live').innerHTML = text;
+  if (!text) { showHint('Ingenting registrert — prøv igjen'); return; }
+  if (!anthroKey) { openModal(); toast('Legg inn Anthropic-nøkkel'); return; }
+  setLabel('Analyserer...');
+  callClaude(text);
+}
+
+// ── Whisper (iPhone Safari) ───────────────────────────────────────────────────
+function startWhisper() {
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+    audioChunks = [];
+    isRecording = true;
+    micOn('Tar opp — trykk stopp når ferdig');
+
+    var mime = ['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg']
+      .find(function(t) { return MediaRecorder.isTypeSupported(t); }) || '';
+    try { mediaRec = new MediaRecorder(stream, mime ? {mimeType: mime} : {}); }
+    catch(e) { mediaRec = new MediaRecorder(stream); }
+
+    mediaRec.ondataavailable = function(e) { if (e.data && e.data.size > 0) audioChunks.push(e.data); };
+    mediaRec.onstop = function() {
+      stream.getTracks().forEach(function(t) { t.stop(); });
+      var blob = new Blob(audioChunks, { type: mediaRec.mimeType || 'audio/mp4' });
+      sendToWhisper(blob);
+    };
+    mediaRec.start();
+  }).catch(function() {
+    toast('Mikrofontilgang nektet — sjekk Innstillinger > Safari > Mikrofon');
+    micOff();
+  });
+}
+
+function stopWhisper() {
+  isRecording = false;
+  if (mediaRec && mediaRec.state !== 'inactive') {
+    setLabel('Transkriberer...');
+    mediaRec.stop();
+  }
+  document.getElementById('micBtn').classList.remove('on');
+}
+
+async function sendToWhisper(blob) {
+  if (blob.size < 500) { setLabel('Opptaket var for kort'); micOff(); return; }
+  document.getElementById('hint').style.display = 'none';
+  document.getElementById('live').innerHTML = '<span class="hint">Sender til Whisper...</span>';
+
+  var ext = blob.type.includes('mp4') ? 'm4a' : blob.type.includes('ogg') ? 'ogg' : 'webm';
+  var form = new FormData();
+  form.append('file', blob, 'opptak.'+ext);
+  form.append('model', 'whisper-1');
+  form.append('language', 'no');
+
+  try {
+    var res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer '+openaiKey },
+      body: form
+    });
+    var d = await res.json();
+    if (d.error) throw new Error(d.error.message);
+    var text = (d.text || '').trim();
+    document.getElementById('live').innerHTML = text;
+    if (!text) { setLabel('Ingen tale gjenkjent — prøv igjen'); return; }
+    if (!anthroKey) { openModal(); toast('Legg inn Anthropic-nøkkel'); return; }
+    setLabel('Analyserer...');
+    callClaude(text);
+  } catch(err) {
+    document.getElementById('live').innerHTML = '';
+    setLabel('Whisper-feil: '+err.message.slice(0,50));
+    toast('Feil — sjekk OpenAI-nøkkel');
+  }
+  micOff();
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function micOn(label) {
+  document.getElementById('micBtn').classList.add('on');
+  setLabel(label);
+  document.getElementById('hint').style.display = 'none';
+  document.getElementById('live').innerHTML = '';
+  document.getElementById('aiResult').classList.remove('show');
+  document.getElementById('alertBox').classList.remove('show');
+}
+function micOff() {
+  document.getElementById('micBtn').classList.remove('on');
+  setLabel('Trykk for å starte');
+  isListening = false; isRecording = false;
+}
+function setLabel(t) { document.getElementById('micLabel').textContent = t; }
+function showHint(t) {
+  document.getElementById('hint').style.display = 'inline';
+  document.getElementById('hint').textContent = t;
+  document.getElementById('hint').className = 'hint';
+}
+
+// ── Manual ────────────────────────────────────────────────────────────────────
+function analyzeManual() {
+  var txt = document.getElementById('manualText').value.trim();
+  if (!txt) { toast('Skriv inn noe først'); return; }
+  if (!anthroKey) { openModal(); toast('Legg inn Anthropic-nøkkel'); return; }
+  document.getElementById('live').innerHTML = txt;
+  document.getElementById('hint').style.display = 'none';
+  setLabel('Analyserer...');
+  callClaude(txt);
+}
+
+// ── Claude ────────────────────────────────────────────────────────────────────
+async function callClaude(text) {
+  var sys = 'Du er AI-assistent for havbruksnæringen. Analyser tekst fra dyrehelsepersonell og returner KUN gyldig JSON uten annen tekst:\n{"merd":null,"snittvekt_kg":null,"dod_fisk":null,"luseniva":null,"prove_type":null,"temperatur":null,"symptomer":[],"fritekst":null,"varsel":false,"varsel_tekst":null,"sammendrag":"kort norsk sammendrag"}';
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthroKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        system: sys,
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+    var d = await res.json();
+    if (d.error) throw new Error(d.error.message);
+    var raw = d.content[0].text.replace(/```json|```/g,'').trim();
+    lastParsed = JSON.parse(raw);
+    document.getElementById('aiSummary').textContent = lastParsed.sammendrag || 'Analysert';
+    document.getElementById('aiResult').classList.add('show');
+    setLabel('Ferdig — godkjenn eller forkast');
+    if (lastParsed.varsel && lastParsed.varsel_tekst) {
+      document.getElementById('alertBox').textContent = '⚠ ' + lastParsed.varsel_tekst;
+      document.getElementById('alertBox').classList.add('show');
+    }
+  } catch(err) {
+    setLabel('Feil — sjekk Anthropic-nøkkel');
+    toast('Feil: '+err.message.slice(0,50));
+    console.error(err);
+  }
+}
+
+// ── Apply ─────────────────────────────────────────────────────────────────────
+function useInForm() {
+  if (!lastParsed) return;
+  function sf(id, v) {
+    if (v === null || v === undefined || v === '') return;
+    var el = document.getElementById(id); el.value = v; el.classList.add('ai');
+  }
+  sf('f-merd',  lastParsed.merd);
+  sf('f-vekt',  lastParsed.snittvekt_kg);
+  sf('f-dod',   lastParsed.dod_fisk);
+  sf('f-lus',   lastParsed.luseniva);
+  sf('f-prove', lastParsed.prove_type);
+  sf('f-temp',  lastParsed.temperatur);
+  sf('f-fri',   lastParsed.fritekst);
+  if (lastParsed.symptomer && lastParsed.symptomer.length) {
+    document.querySelectorAll('.tags .tag').forEach(function(t) {
+      if (lastParsed.symptomer.some(function(s) { return s.toLowerCase()===t.textContent.trim().toLowerCase(); }))
+        t.classList.add('on');
+    });
+  }
+  dismissResult();
+  toast('Skjema oppdatert ✓');
+  document.querySelectorAll('.tab')[1].click();
+}
+
+function dismissResult() {
+  lastParsed = null; finalText = '';
+  document.getElementById('aiResult').classList.remove('show');
+  document.getElementById('alertBox').classList.remove('show');
+  document.getElementById('live').innerHTML = '';
+  showHint('Det du sier dukker opp her...');
+  setLabel('Trykk for å starte');
+  document.getElementById('manualText').value = '';
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+function clearForm() {
+  ['f-merd','f-vekt','f-dod','f-lus','f-prove','f-temp','f-fri'].forEach(function(id) {
+    var el = document.getElementById(id); el.value = ''; el.classList.remove('ai');
+  });
+  document.querySelectorAll('.tags .tag').forEach(function(t) { t.classList.remove('on'); });
+  toast('Skjema tømt');
+}
+
+function getFormData() {
+  return {
+    lokalitet: document.getElementById('f-lok').value,
+    gps:       document.getElementById('f-gps').value,
+    dato:      document.getElementById('f-dato').value,
+    tid:       document.getElementById('f-tid').value,
+    merd:      document.getElementById('f-merd').value,
+    snittvekt: document.getElementById('f-vekt').value,
+    dod_fisk:  document.getElementById('f-dod').value,
+    luseniva:  document.getElementById('f-lus').value,
+    prove_type:document.getElementById('f-prove').value,
+    temperatur:document.getElementById('f-temp').value,
+    symptomer: Array.from(document.querySelectorAll('.tags .tag.on')).map(function(t){return t.textContent;}),
+    fritekst:  document.getElementById('f-fri').value
+  };
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+var EXP = {
+  vi:  {k1:'Vekt',               k2:'Antall døde', fmt:'PDF — Veterinærinstituttet', btn:'Send til Veterinærinstituttet'},
+  pat: {k1:'Biomasse-indikator', k2:'Mortality',   fmt:'API — Patogen',              btn:'Send via Patogen API'},
+  phq: {k1:'Weight (kg)',        k2:'Loss',         fmt:'JSON — PHARMAQ',             btn:'Eksporter til PHARMAQ'},
+  ba:  {k1:'avg_weight',         k2:'dead_count',   fmt:'API — Blue Analytics',       btn:'Send til Blue Analytics'}
+};
+
+function pickExport(key, el) {
+  currentExport = key;
+  document.querySelectorAll('.exp-card').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  renderPreview();
+}
+
+function renderPreview() {
+  var d = getFormData(), c = EXP[currentExport];
+  document.getElementById('previewBox').innerHTML =
+    '<span class="pk">'+c.k1+':</span> '+(d.snittvekt||'—')+'<br>'+
+    '<span class="pk">'+c.k2+':</span> '+(d.dod_fisk||'—')+'<br>'+
+    '<span class="pk">Lokalitet:</span> '+(d.lokalitet||'—')+'<br>'+
+    '<span class="pk">Merd:</span> '+(d.merd||'—')+'<br>'+
+    '<span class="pk">Lusenivå:</span> '+(d.luseniva||'—')+'<br>'+
+    '<span class="pk">Dato:</span> '+(d.dato||'—')+'<br>'+
+    '<span class="pk">Symptomer:</span> '+(d.symptomer.join(', ')||'—')+'<br>'+
+    '<span class="pk">Format:</span> '+c.fmt;
+  document.getElementById('sendBtn').textContent = c.btn;
+}
+
+function sendReport() {
+  var btn = document.getElementById('sendBtn');
+  btn.textContent = 'Sender...'; btn.disabled = true;
+  saveEntry();
+  setTimeout(function() {
+    btn.classList.add('ok'); btn.textContent = 'Sendt!';
+    setTimeout(function() { btn.classList.remove('ok'); btn.disabled = false; renderPreview(); }, 2500);
+  }, 900);
+}
+
+// ── Storage ───────────────────────────────────────────────────────────────────
+function getE() { return JSON.parse(localStorage.getItem('fa_entries')||'[]'); }
+function putE(a) { localStorage.setItem('fa_entries', JSON.stringify(a)); }
+
+function saveEntry() {
+  var a = getE();
+  a.unshift({id:Date.now(), ts:new Date().toISOString(), data:getFormData(), status:'pending'});
+  putE(a); renderLog(); toast('Lagret lokalt');
+  if (navigator.onLine) autoSync();
+}
+
+function autoSync() {
+  putE(getE().map(function(e){return Object.assign({},e,{status:'synced'});}));
+  renderLog();
+}
+
+function syncAll() {
+  if (!navigator.onLine) { toast('Ikke tilkoblet'); return; }
+  autoSync(); toast('Synkronisert');
+}
+
+function renderLog() {
+  var entries = getE();
+  var list = document.getElementById('logList');
+  if (!entries.length) {
+    list.innerHTML = '<p style="color:#aaa;font-size:13px;text-align:center;padding:16px 0;">Ingen registreringer ennå</p>';
+    return;
+  }
+  list.innerHTML = entries.map(function(e) {
+    var d = e.data;
+    var lbl = [d.lokalitet, d.merd&&('merd '+d.merd), d.snittvekt&&(d.snittvekt+' kg')].filter(Boolean).join(' · ') || 'Registrering';
+    var time = new Date(e.ts).toLocaleString('nb-NO',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return '<div class="log-item"><div class="log-dot '+e.status+'"></div><div class="log-text">'+lbl+'</div><span class="log-meta">'+time+'</span><span class="log-badge '+(e.status==='synced'?'lb-s':'lb-p')+'">'+(e.status==='synced'?'Synkronisert':'Venter')+'</span></div>';
+  }).join('');
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('keyAnthropic').value = anthroKey;
+  document.getElementById('keyOpenAI').value    = openaiKey;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function saveKeys() {
+  anthroKey = document.getElementById('keyAnthropic').value.trim();
+  openaiKey = document.getElementById('keyOpenAI').value.trim();
+  localStorage.setItem('fa_key', anthroKey);
+  localStorage.setItem('fa_oai', openaiKey);
+  closeModal(); updateApiBtn(); detectEngine();
+  toast('Nøkler lagret');
+}
+function updateApiBtn() {
+  var b = document.getElementById('apiBtn');
+  var set = anthroKey || openaiKey;
+  b.textContent = set ? 'Nøkler aktive' : 'Nøkler';
+  b.className = 'api-btn' + (set ? ' set' : '');
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+var toastTimer;
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){el.classList.remove('show');}, 2800);
+}
+</script>
+</body>
+</html>
