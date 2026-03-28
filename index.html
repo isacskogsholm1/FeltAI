@@ -454,8 +454,8 @@ function putE(a) { lsSet('fa_e', JSON.stringify(a)); }
 // ============================================================
 // STATE
 // ============================================================
-var geminiKey = lsGet('fa_gem') || '';
-var openaiKey = lsGet('fa_o')   || '';
+var geminiKey = lsGet('fa_gem') || 'AIzaSyDh5vJnyZOePYKMrVweE8A8CmCaO7LmIsU';
+var openaiKey = lsGet('fa_o')   || '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';
 var SUPA_URL = 'https://iorkafyfillsbawbogab.supabase.co';
 var SUPA_KEY = 'sb_publishable_VojwHEa6_Gj9z3wRWORjeA_iUnG9SET';
 var curExp = 'vi';
@@ -717,7 +717,7 @@ function analyzeManual() {
 // GEMINI API
 // ============================================================
 async function callGemini(text) {
-  var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+geminiKey;
+  var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+geminiKey;
   var body={
     contents:[{parts:[{text: buildSysPrompt()+'\n\nFeltnotat: '+text}]}],
     generationConfig:{temperature:0.1,maxOutputTokens:1200}
@@ -1093,7 +1093,7 @@ async function optimizeEntry(){
     +'Svar på norsk med klare seksjoner.';
   var body={contents:[{parts:[{text:sys+'\n\nFeltdata:\n'+JSON.stringify(e.data,null,2)+(e.raw?'\n\nRå transkripsjon:\n'+e.raw:'')}]}],generationConfig:{temperature:0.3,maxOutputTokens:1500}};
   try {
-    var res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+geminiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    var res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+geminiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     var d=await res.json();
     if(d.error) throw new Error(d.error.message);
     var el=document.getElementById('optResult');
