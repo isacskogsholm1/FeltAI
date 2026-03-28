@@ -396,6 +396,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   <div class="modal">
     <div class="modal-handle"></div>
     <h3>&#128273; API-nøkler</h3>
+    <div style="background:#e8f8f1;border:1px solid #9FE1CB;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#0F6E56;"><strong>Supabase:</strong> Koblet til iorkafyfillsbawbogab.supabase.co ✓</div>
     <p>Nøklene lagres fast i nettleseren — du trenger bare å legge dem inn én gang.</p>
     <div class="msec">Google Gemini (gratis)</div>
     <p style="font-size:12px;color:#888;margin:-8px 0 8px;">Hent gratis nøkkel på <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#1D9E75;">aistudio.google.com</a></p>
@@ -455,6 +456,8 @@ function putE(a) { lsSet('fa_e', JSON.stringify(a)); }
 // ============================================================
 var geminiKey = lsGet('fa_gem') || '';
 var openaiKey = lsGet('fa_o')   || '';
+var SUPA_URL = 'https://iorkafyfillsbawbogab.supabase.co';
+var SUPA_KEY = 'sb_publishable_VojwHEa6_Gj9z3wRWORjeA_iUnG9SET';
 var curExp = 'vi';
 var lastParsed = null;
 var curSev = '';
@@ -870,6 +873,54 @@ function getFormData() {
 // ============================================================
 // STORAGE OPERATIONS
 // ============================================================
+async function syncToSupabase(entry) {
+  try {
+    var d = entry.data;
+    var payload = {
+      lokalitet:        d.lokalitet || null,
+      biolog:           d.biolog    || null,
+      merd:             d.merd      || null,
+      art:              d.art       || null,
+      dato:             d.dato      || null,
+      snittvekt:        d.snittvekt  ? parseFloat(d.snittvekt)  : null,
+      dod_fisk:         d.dod_fisk   ? parseInt(d.dod_fisk)     : null,
+      dod_pst:          d.dod_pst    ? parseFloat(d.dod_pst)    : null,
+      temp:             d.temp       ? parseFloat(d.temp)       : null,
+      luseniva_hv:      d.lus_hv     ? parseFloat(d.lus_hv)    : null,
+      prove_type:       d.prove      || null,
+      lab:              d.lab        || null,
+      alvorlighet:      d.alvorlighet || null,
+      symptomer:        d.symptomer  || [],
+      vurdering:        d.vurdering  || null,
+      tiltak:           d.tiltak     || null,
+      raa_transkripsjon: entry.raw   || null,
+      ai_sammendrag:    (lastParsed && lastParsed.sammendrag) || null,
+      full_data:        d
+    };
+    var res = await fetch(SUPA_URL + '/rest/v1/registreringer', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'apikey':        SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Prefer':        'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      toast('Synkronisert til Supabase ✓');
+      return true;
+    } else {
+      var err = await res.json();
+      console.error('Supabase feil:', err);
+      return false;
+    }
+  } catch(e) {
+    console.error('Supabase sync feil:', e);
+    return false;
+  }
+}
+
 function saveRaw(text) {
   var a=getE();
   a.unshift({id:Date.now(),ts:new Date().toISOString(),data:getFormData(),raw:text,status:'pending',draft:true});
@@ -884,6 +935,7 @@ function updateDraftEntry() {
     entries[0].raw=lastParsed._raw||entries[0].raw;
     entries[0].draft=false;
     putE(entries); renderLog();
+    if (navigator.onLine) syncToSupabase(entries[0]);
   } else {
     saveEntry(true);
   }
@@ -892,10 +944,21 @@ function updateDraftEntry() {
 function saveEntry(silent) {
   var a=getE();
   var raw=(lastParsed&&lastParsed._raw)?lastParsed._raw:'';
-  a.unshift({id:Date.now(),ts:new Date().toISOString(),data:getFormData(),raw:raw,status:'pending'});
+  var entry={id:Date.now(),ts:new Date().toISOString(),data:getFormData(),raw:raw,status:'pending'};
+  a.unshift(entry);
   putE(a); renderLog();
   if (!silent) toast('Lagret ('+a.length+' totalt)');
-  if (navigator.onLine) autoSync();
+  if (navigator.onLine) {
+    syncToSupabase(entry).then(function(ok) {
+      if (ok) {
+        var entries=getE();
+        if (entries[0] && entries[0].id===entry.id) {
+          entries[0].status='synced';
+          putE(entries); renderLog();
+        }
+      }
+    });
+  }
 }
 
 function autoSync() {
@@ -904,7 +967,22 @@ function autoSync() {
 }
 function syncAll() {
   if (!navigator.onLine){toast('Ikke tilkoblet');return;}
-  autoSync(); toast('Synkronisert ✓');
+  var entries=getE();
+  var pending=entries.filter(function(e){return e.status==='pending'&&!e.draft;});
+  if (!pending.length){toast('Alt er synkronisert ✓');return;}
+  toast('Synkroniserer '+pending.length+' registrering(er)...');
+  var done=0;
+  pending.forEach(function(entry) {
+    syncToSupabase(entry).then(function(ok) {
+      if (ok) {
+        var all=getE();
+        var idx=all.findIndex(function(e){return e.id===entry.id;});
+        if (idx>=0){all[idx].status='synced';putE(all);}
+        done++;
+        if (done===pending.length){renderLog();toast('Synkronisert '+done+' registrering(er) ✓');}
+      }
+    });
+  });
 }
 
 // ============================================================
