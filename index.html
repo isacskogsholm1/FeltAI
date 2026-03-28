@@ -140,15 +140,15 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   </div>
   <div style="display:flex;gap:8px;align-items:center;">
     <span id="onlineEl" style="font-size:12px;color:#aaa;"></span>
-    <div class="icon-btn" id="keyBtn" onclick="openKeyModal()">&#128273;</div>
+    <div class="icon-btn" id="keyBtn" onclick="openKeyModal()">🔑</div>
   </div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="goTab('stemme',this)">&#127908; Opptak</div>
-  <div class="tab" onclick="goTab('skjema',this)">&#128203; Skjema</div>
-  <div class="tab" onclick="goTab('eksport',this)">&#128228; Eksport</div>
-  <div class="tab" onclick="goTab('logg',this)">&#128193; Historikk</div>
+  <div class="tab active" onclick="goTab('stemme',this)">🎙 Opptak</div>
+  <div class="tab" onclick="goTab('skjema',this)">📋 Skjema</div>
+  <div class="tab" onclick="goTab('eksport',this)">📤 Eksport</div>
+  <div class="tab" onclick="goTab('logg',this)">📁 Historikk</div>
 </div>
 
 <!-- STEMME -->
@@ -177,12 +177,12 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
     <div class="ai-card" id="aiCard">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
         <span class="ai-badge">Claude</span>
-        <span style="font-size:13px;color:#0F6E56;font-weight:500;">Analysert</span>
+        <span style="font-size:13px;color:#0F6E56;font-weight:500;">Analysert ✓</span>
       </div>
       <div class="ai-summary" id="aiSum"></div>
       <div class="ai-fields" id="aiFields"></div>
       <div class="ai-actions">
-        <button class="btn-use" onclick="useInForm()">&#10003; Overfør til skjema</button>
+        <button class="btn-use" onclick="useInForm()">✓ Overfør til skjema</button>
         <button class="btn-skip" onclick="dismissResult()">Forkast</button>
       </div>
     </div>
@@ -192,15 +192,15 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
     <div class="hrow">
       <div class="hchip" onclick="addPhrase('Merd ')">Merd __</div>
       <div class="hchip" onclick="addPhrase('Snittvekt ')">Snittvekt __ kg</div>
-      <div class="hchip" onclick="addPhrase(' doedfisk')">__ doedfisk</div>
-      <div class="hchip" onclick="addPhrase('Lusenivaa ')">Lusenivaa __</div>
-      <div class="hchip" onclick="addPhrase('AGD proeve')">AGD proeve</div>
+      <div class="hchip" onclick="addPhrase(' dødfisk')">__ dødfisk</div>
+      <div class="hchip" onclick="addPhrase('Lusenivå ')">Lusenivå __</div>
+      <div class="hchip" onclick="addPhrase('AGD prøve')">AGD prøve</div>
       <div class="hchip" onclick="addPhrase('Normal')">Normal</div>
     </div>
   </div>
   <div class="card">
     <div class="card-title" style="margin-bottom:10px;">Skriv inn manuelt</div>
-    <textarea class="manual-area" id="manualText" rows="3" placeholder="F.eks: Merd 4, snittvekt 2,3 kg, 5 doedfisk, petekkier paa lever..."></textarea>
+    <textarea class="manual-area" id="manualText" rows="3" placeholder="F.eks: Merd 4, snittvekt 2,3 kg, 5 dødfisk, petekkier paa lever..."></textarea>
     <button class="btn-analyze" onclick="analyzeManual()">Analyser med Claude</button>
   </div>
 </div>
@@ -223,13 +223,13 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
     <div class="form-grid">
       <div class="fg"><label>Merd nr.</label><input id="f-merd" placeholder="--"></div>
       <div class="fg"><label>Art</label>
-        <select id="f-art"><option value="">Velg art</option><option>Atlantisk laks</option><option>Regnbueoerret</option><option>Oerret</option></select>
+        <select id="f-art"><option value="">Velg art</option><option>Atlantisk laks</option><option>Regnbueørret</option><option>Ørret</option></select>
       </div>
       <div class="fg"><label>Snittvekt (kg)</label><input id="f-vekt" placeholder="--"></div>
       <div class="fg"><label>Ant. fisk</label><input id="f-antall" placeholder="--"></div>
-      <div class="fg"><label>Antall doedfisk</label><input id="f-dod" placeholder="--"></div>
-      <div class="fg"><label>Doedelighet (%)</label><input id="f-dodpst" placeholder="Auto"></div>
-      <div class="fg"><label>Vanntemp. (C)</label><input id="f-temp" placeholder="--"></div>
+      <div class="fg"><label>Antall dødfisk</label><input id="f-dod" placeholder="--"></div>
+      <div class="fg"><label>Dødelighet (%)</label><input id="f-dodpst" placeholder="Auto"></div>
+      <div class="fg"><label>Vanntemp. (°C)</label><input id="f-temp" placeholder="--"></div>
       <div class="fg"><label>Oksygen (mg/L)</label><input id="f-o2" placeholder="--"></div>
     </div>
   </div>
@@ -247,14 +247,14 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Klinisk undersokelse</div>
+    <div class="card-title">Klinisk undersøkelse</div>
     <div class="form-grid">
       <div class="sep">Ytre funn</div>
       <div class="fg full"><div class="tags">
-        <span class="tag" onclick="togTag(this)">Saar</span>
+        <span class="tag" onclick="togTag(this)">Sår</span>
         <span class="tag" onclick="togTag(this)">Finneslitasje</span>
         <span class="tag" onclick="togTag(this)">Skjelltap</span>
-        <span class="tag" onclick="togTag(this)">Moerk pigmentering</span>
+        <span class="tag" onclick="togTag(this)">Mørk pigmentering</span>
         <span class="tag" onclick="togTag(this)">Blek</span>
         <span class="tag" onclick="togTag(this)">Eksofthalmi</span>
         <span class="tag" onclick="togTag(this)">Katarakt</span>
@@ -264,10 +264,10 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
       <div class="fg full"><div class="tags">
         <span class="tag" onclick="togTag(this)">Gjellelokk normalt</span>
         <span class="tag warn" onclick="togTag(this)">Gjellenekrose</span>
-        <span class="tag warn" onclick="togTag(this)">Gjellebloedning</span>
-        <span class="tag warn" onclick="togTag(this)">Mukus paa gjeller</span>
+        <span class="tag warn" onclick="togTag(this)">Gjelleblødning</span>
+        <span class="tag warn" onclick="togTag(this)">Mukus på gjeller</span>
         <span class="tag warn" onclick="togTag(this)">Svulne gjeller</span>
-        <span class="tag warn" onclick="togTag(this)">AGD (ameboese gjeller)</span>
+        <span class="tag warn" onclick="togTag(this)">AGD (amøbøse gjeller)</span>
       </div></div>
       <div class="sep">Indre organer</div>
       <div class="fg full"><div class="tags">
@@ -275,10 +275,10 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
         <span class="tag warn" onclick="togTag(this)">Blek lever</span>
         <span class="tag warn" onclick="togTag(this)">Bleket lever</span>
         <span class="tag warn" onclick="togTag(this)">Gul lever</span>
-        <span class="tag warn" onclick="togTag(this)">Petekkier paa lever</span>
-        <span class="tag warn" onclick="togTag(this)">Forstorret lever</span>
-        <span class="tag warn" onclick="togTag(this)">Bloedninger i nyre</span>
-        <span class="tag warn" onclick="togTag(this)">Forstorret milt</span>
+        <span class="tag warn" onclick="togTag(this)">Petekkier på lever</span>
+        <span class="tag warn" onclick="togTag(this)">Forstørret lever</span>
+        <span class="tag warn" onclick="togTag(this)">Blødninger i nyre</span>
+        <span class="tag warn" onclick="togTag(this)">Forstørret milt</span>
         <span class="tag warn" onclick="togTag(this)">Ascites</span>
         <span class="tag warn" onclick="togTag(this)">Ekssudater</span>
         <span class="tag warn" onclick="togTag(this)">Petekkier i bukhule</span>
@@ -294,17 +294,17 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Proeveuttak</div>
+    <div class="card-title">Prøveuttak</div>
     <div class="form-grid">
-      <div class="fg"><label>Proevetype</label>
-        <select id="f-prove"><option value="">Velg</option><option>Histologi</option><option>Virologi (PCR)</option><option>Bakteriologi</option><option>AGD-proeve</option><option>Blodproeve</option><option>Gjelleavskrap</option><option>Tarmbiopsi</option><option>Organpakke</option></select>
+      <div class="fg"><label>Prøvetype</label>
+        <select id="f-prove"><option value="">Velg</option><option>Histologi</option><option>Virologi (PCR)</option><option>Bakteriologi</option><option>AGD-prøve</option><option>Blodprøve</option><option>Gjelleavskrap</option><option>Tarmbiopsi</option><option>Organpakke</option></select>
       </div>
-      <div class="fg"><label>Ant. fisk proevetatt</label><input id="f-proven" placeholder="--"></div>
+      <div class="fg"><label>Ant. fisk prøvetatt</label><input id="f-proven" placeholder="--"></div>
       <div class="fg"><label>Laboratorium</label>
-        <select id="f-lab"><option value="">Velg lab</option><option>Veterinaerinstituttet</option><option>Patogen AS</option><option>PHARMAQ Analytix</option><option>Blue Analytics</option><option>AniCura</option></select>
+        <select id="f-lab"><option value="">Velg lab</option><option>Veterinærinstituttet</option><option>Patogen AS</option><option>PHARMAQ Analytix</option><option>Blue Analytics</option><option>AniCura</option></select>
       </div>
       <div class="fg"><label>Hastegrad</label>
-        <select id="f-haste"><option value="">Normal</option><option>Haster</option><option>Oyeblikkelig</option></select>
+        <select id="f-haste"><option value="">Normal</option><option>Haster</option><option>Øyeblikkelig</option></select>
       </div>
     </div>
   </div>
@@ -318,24 +318,24 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
       <span class="tag" onclick="togTag(this)">IPN</span>
       <span class="tag" onclick="togTag(this)">CMS (Hjertesprekk)</span>
       <span class="tag" onclick="togTag(this)">HSMI</span>
-      <span class="tag" onclick="togTag(this)">Ameboes gjellesykdom</span>
+      <span class="tag" onclick="togTag(this)">Amøbøs gjellesykdom</span>
       <span class="tag" onclick="togTag(this)">Branchionephritis</span>
       <span class="tag" onclick="togTag(this)">Furunkulose</span>
       <span class="tag" onclick="togTag(this)">BKD</span>
       <span class="tag" onclick="togTag(this)">Flavobakteriose</span>
-      <span class="tag" onclick="togTag(this)">Ernaeringsmangel</span>
+      <span class="tag" onclick="togTag(this)">Ernæringsmangel</span>
     </div>
   </div>
   <div class="card">
     <div class="card-title">Konklusjon</div>
     <div class="form-grid">
       <div class="fg full"><label>Klinisk vurdering</label><textarea id="f-vurd" rows="3" placeholder="Samlet vurdering..."></textarea></div>
-      <div class="fg full"><label>Anbefalte tiltak</label><textarea id="f-tiltak" rows="3" placeholder="Behandling, oppfoelging..."></textarea></div>
+      <div class="fg full"><label>Anbefalte tiltak</label><textarea id="f-tiltak" rows="3" placeholder="Behandling, oppfølging..."></textarea></div>
       <div class="fg full"><label>Merknad</label><textarea id="f-merk" rows="2" placeholder="--"></textarea></div>
     </div>
   </div>
   <div class="form-actions">
-    <button class="btn-secondary" onclick="clearForm()">Toem</button>
+    <button class="btn-secondary" onclick="clearForm()">Tøm</button>
     <button class="btn-primary" onclick="saveEntry(false)">Lagre</button>
   </div>
 </div>
@@ -345,7 +345,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   <div class="card">
     <div class="card-title">Mottaker</div>
     <div class="export-grid">
-      <div class="exp-card on" id="ex-vi" onclick="pickExp('vi',this)"><div class="exp-name">Veterinaerinstituttet</div><span class="exp-badge b-pdf">PDF</span><div class="exp-desc">Norsk offisielt skjema</div></div>
+      <div class="exp-card on" id="ex-vi" onclick="pickExp('vi',this)"><div class="exp-name">Veterinærinstituttet</div><span class="exp-badge b-pdf">PDF</span><div class="exp-desc">Norsk offisielt skjema</div></div>
       <div class="exp-card" id="ex-pat" onclick="pickExp('pat',this)"><div class="exp-name">Patogen AS</div><span class="exp-badge b-api">API</span><div class="exp-desc">Direkte innsending</div></div>
       <div class="exp-card" id="ex-phq" onclick="pickExp('phq',this)"><div class="exp-name">PHARMAQ</div><span class="exp-badge b-json">JSON</span><div class="exp-desc">Engelsk terminologi</div></div>
       <div class="exp-card" id="ex-ba" onclick="pickExp('ba',this)"><div class="exp-name">Blue Analytics</div><span class="exp-badge b-api">API</span><div class="exp-desc">Dataanalyse</div></div>
@@ -371,8 +371,8 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
   </div>
   <button class="btn-primary" onclick="syncAll()" style="width:100%;">Synkroniser alle</button>
   <div class="card" style="margin-top:14px;">
-    <div class="card-title">Laer appen nye ord</div>
-    <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.5;">Fant appen et ord feil? Legg inn rettelsen saa husker Claude det neste gang.</p>
+    <div class="card-title">Lær appen nye ord</div>
+    <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.5;">Fant appen et ord feil? Legg inn rettelsen så husker Claude det neste gang.</p>
     <div style="display:flex;gap:8px;margin-bottom:10px;">
       <input id="cv-wrong" placeholder="Feil ord (f.eks. pankres)" style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid #d0cec8;font-size:14px;font-family:inherit;outline:none;">
       <span style="display:flex;align-items:center;color:#aaa;font-size:20px;">&#8594;</span>
@@ -387,9 +387,9 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
 <div class="overlay" id="keyModal" onclick="if(event.target===this)closeKeyModal()">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>API-nokler</h3>
+    <h3>API-nøkler</h3>
     <p>Lagres kun lokalt i denne nettleseren.</p>
-    <div class="msec">Anthropic Claude (paakreved)</div>
+    <div class="msec">Anthropic Claude (påkrevd)</div>
     <input type="password" id="k-ant" placeholder="sk-ant-...">
     <div class="msec">OpenAI Whisper (valgfritt, for iPhone)</div>
     <input type="password" id="k-oai" placeholder="sk-...">
@@ -408,7 +408,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
       <h3 id="em-title" style="font-size:16px;max-width:80%;"></h3>
       <span onclick="closeEntry()" style="font-size:24px;color:#ccc;cursor:pointer;line-height:1;">&#215;</span>
     </div>
-    <div class="msec">Raa transkripsjon (rediger og re-analyser)</div>
+    <div class="msec">Rå transkripsjon (rediger og re-analyser)</div>
     <textarea id="em-raw" rows="4" placeholder="Ingen transkripsjon lagret"></textarea>
     <div style="display:flex;gap:8px;margin-bottom:16px;">
       <button onclick="reanalyze()" style="flex:1;padding:10px;background:#f0eeea;border:1px solid #d0cec8;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:#555;">Re-analyser</button>
@@ -418,8 +418,8 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f0eeea; c
     <div id="em-fields" style="margin-bottom:16px;"></div>
     <div style="padding-top:14px;border-top:1px solid #e5e3de;">
       <div class="msec">AI-optimalisering</div>
-      <p style="font-size:13px;color:#888;margin-bottom:10px;line-height:1.5;">Claude fyller inn manglende felt, foreslaar diagnose og skriver klinisk vurdering.</p>
-      <button onclick="optimizeEntry()" id="optBtn" style="width:100%;padding:11px;background:#1D9E75;border:none;border-radius:10px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;">&#10022; Optimaliser med Claude</button>
+      <p style="font-size:13px;color:#888;margin-bottom:10px;line-height:1.5;">Claude fyller inn manglende felt, foreslår diagnose og skriver klinisk vurdering.</p>
+      <button onclick="optimizeEntry()" id="optBtn" style="width:100%;padding:11px;background:#1D9E75;border:none;border-radius:10px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;">✦ Optimaliser med Claude</button>
       <div class="opt-result" id="optResult"></div>
     </div>
     <div style="display:flex;gap:10px;margin-top:18px;">
@@ -469,15 +469,15 @@ var VOCAB = [
   'pankreassykdom','PD','IHN','VHS','ISA','IPN','CMS','hjertesprekk','HSMI',
   'AGD','ameboes gjellesykdom','branchionephritis','furunkulose','BKD','flavobakteriose',
   'histologi','virologi','bakteriologi','PCR','organpakke','gjelleavskrap','blodproeve',
-  'Veterinaerinstituttet','Patogen','PHARMAQ','Blue Analytics',
+  'Veterinærinstituttet','Patogen','PHARMAQ','Blue Analytics',
   'atlantisk laks','regnbueoerret','postsmolt','smolt','settefisk',
   'hydrogenperoksid','azametifos','deltametrin','rensefisk','termisk behandling'
 ];
 
 var CORRECTIONS = [
-  '"pankreas" / "pankreass" / "pankres" / "pancreas" -> pankreassykdom (PD)',
-  '"marit" / "merret" / "merit" -> merd',
-  '"AGD" / "asjede" / "asjd" / "amobe" -> ameboes gjellesykdom (AGD)',
+  '"pankreas" / "pankreass" / "pankres" / "pancreas" → pankreassykdom (PD)',
+  '"marit" / "merret" / "merit" → merd',
+  '"AGD" / "asjede" / "asjd" / "amøbe" → amøbøs gjellesykdom (AGD)',
   '"CMS" / "hjertesprekk" / "hjertesprek" -> kardiomyopati syndrom (CMS)',
   '"IPN" / "i pe en" -> infeksios pankreasnekrose (IPN)',
   '"ISA" / "i es a" / "infeksios laksanemie" -> ISA',
@@ -565,8 +565,8 @@ function detectEngine() {
     document.getElementById('epill').textContent = 'Web Speech';
   } else if (hasMR) {
     engine = 'whisper';
-    document.getElementById('epill').textContent = openaiKey ? 'Whisper' : 'Trenger OpenAI-nokkel';
-    if (!openaiKey) document.getElementById('micLabel').textContent = 'Legg inn OpenAI-nokkel, eller bruk tekst';
+    document.getElementById('epill').textContent = openaiKey ? 'Whisper' : 'Trenger OpenAI-nøkkel';
+    if (!openaiKey) document.getElementById('micLabel').textContent = 'Legg inn OpenAI-nøkkel, eller bruk tekst';
   } else {
     engine = 'none';
     document.getElementById('micBtn').disabled = true;
@@ -601,7 +601,7 @@ function toggleMic() {
 function startWS() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   finalText = ''; isListening = true;
-  micOn('Opptak paagarr -- trykk stopp naar ferdig');
+  micOn('Opptak pågår — trykk stopp når ferdig');
 
   function spawn() {
     if (!isListening) return;
@@ -634,8 +634,10 @@ function stopWS() {
   micOff();
   var text = finalText.trim();
   showLive(text, '');
-  if (!text) { setStatus('', 'Ingenting registrert'); return; }
-  if (!anthroKey) { openKeyModal(); return; }
+  if (!text) { setStatus('', 'Ingenting registrert — prøv igjen'); return; }
+  // Save raw transcript immediately
+  saveRawTranscript(text);
+  if (!anthroKey) { openKeyModal(); toast('Legg inn API-nøkkel for å analysere'); return; }
   setStatus('processing', 'Analyserer...');
   callClaude(text);
 }
@@ -643,7 +645,7 @@ function stopWS() {
 function startWhisper() {
   navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
     audioChunks = []; isRecording = true;
-    micOn('Tar opp -- trykk stopp naar ferdig');
+    micOn('Tar opp — trykk stopp når ferdig');
     var mime = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg']
       .find(function(t) { return MediaRecorder.isTypeSupported(t); }) || '';
     try { mediaRec = new MediaRecorder(stream, mime ? { mimeType: mime } : {}); }
@@ -664,7 +666,7 @@ function stopWhisper() {
 }
 
 async function sendWhisper(blob) {
-  if (blob.size < 500) { setStatus('', 'For kort'); micOff(); return; }
+  if (blob.size < 500) { setStatus('', 'For kort — snakk lenger'); micOff(); return; }
   document.getElementById('hint').style.display = 'none';
   document.getElementById('live').innerHTML = '...';
   var ext = blob.type.includes('mp4') ? 'm4a' : blob.type.includes('ogg') ? 'ogg' : 'webm';
@@ -680,12 +682,14 @@ async function sendWhisper(blob) {
     if (d.error) throw new Error(d.error.message);
     var text = (d.text || '').trim();
     showLive(text, '');
-    if (!text) { setStatus('', 'Ingen tale'); return; }
-    if (!anthroKey) { openKeyModal(); return; }
+    if (!text) { setStatus('', 'Ingen tale registrert — prøv igjen'); return; }
+    // Save raw transcript immediately
+    saveRawTranscript(text);
+    if (!anthroKey) { openKeyModal(); toast('Legg inn API-nøkkel for å analysere'); return; }
     setStatus('processing', 'Analyserer...');
     callClaude(text);
   } catch(err) {
-    setStatus('', 'Whisper-feil');
+    setStatus('', 'Whisper-feil — sjekk OpenAI-nøkkel');
     toast('Feil: ' + err.message.slice(0, 50));
   }
   micOff();
@@ -704,7 +708,7 @@ function micOn(label) {
 
 function micOff() {
   document.getElementById('micBtn').classList.remove('on');
-  document.getElementById('micLabel').textContent = 'Trykk for aa starte opptak';
+  document.getElementById('micLabel').textContent = 'Trykk for å starte opptak';
   isListening = false; isRecording = false;
 }
 
@@ -732,9 +736,10 @@ function addPhrase(txt) {
 // ============================================================
 function analyzeManual() {
   var txt = document.getElementById('manualText').value.trim();
-  if (!txt) { toast('Skriv inn noe foerst'); return; }
+  if (!txt) { toast('Skriv inn noe først'); return; }
   if (!anthroKey) { openKeyModal(); return; }
   showLive(txt, '');
+  saveRawTranscript(txt);
   setStatus('processing', 'Analyserer...');
   callClaude(txt);
 }
@@ -765,11 +770,20 @@ async function callClaude(text) {
     lastParsed = JSON.parse(raw);
     lastParsed._raw = text;
     showAiCard();
-    setStatus('done', 'Analysert');
+    setStatus('done', 'Analysert ✓');
     fillForm();
-    saveEntry(true);
+    // Update the draft entry with the AI-parsed form data
+    var entries = getE();
+    if (entries.length > 0 && entries[0].draft) {
+      entries[0].data = getFormData();
+      entries[0].draft = false;
+      putE(entries);
+      renderLog();
+    } else {
+      saveEntry(true);
+    }
   } catch(err) {
-    setStatus('', 'Feil -- sjekk nokkel');
+    setStatus('', 'Feil — sjekk nøkkel');
     toast('Feil: ' + err.message.slice(0, 60));
     console.error(err);
   }
@@ -781,7 +795,7 @@ function showAiCard() {
   var fields = [
     { l: 'Merd',       v: lastParsed.merd },
     { l: 'Snittvekt',  v: lastParsed.snittvekt_kg ? lastParsed.snittvekt_kg + ' kg' : null },
-    { l: 'Doedfisk',   v: lastParsed.dod_fisk },
+    { l: 'Dødfisk',   v: lastParsed.dod_fisk },
     { l: 'Proeve',     v: lastParsed.prove_type },
     { l: 'Alvorlighet',v: lastParsed.alvorlighet }
   ].filter(function(f) { return f.v; });
@@ -883,7 +897,7 @@ function clearForm() {
   document.querySelectorAll('.tags .tag').forEach(function(t) { t.classList.remove('on'); });
   ['low','mid','high'].forEach(function(k) { document.getElementById('sev-' + k).className = 'sev-btn'; });
   curSev = '';
-  toast('Skjema toemt');
+  toast('Skjema tømt');
 }
 
 function getFormData() {
@@ -922,6 +936,27 @@ function getFormData() {
 // ============================================================
 // STORAGE OPERATIONS
 // ============================================================
+// Save raw transcript as a draft entry immediately when recording stops
+function saveRawTranscript(text) {
+  var a = getE();
+  // Replace last entry if it was a draft from same session (within 5 sec)
+  var now = Date.now();
+  if (a.length > 0 && a[0].draft && (now - a[0].id) < 5000) {
+    a.shift(); // remove previous draft
+  }
+  a.unshift({
+    id: now,
+    ts: new Date().toISOString(),
+    data: getFormData(),
+    raw: text,
+    status: 'pending',
+    draft: true
+  });
+  putE(a);
+  renderLog();
+  toast('Opptak lagret (' + text.split(' ').length + ' ord)');
+}
+
 function saveEntry(silent) {
   var a = getE();
   var rawText = (lastParsed && lastParsed._raw) ? lastParsed._raw : '';
@@ -955,13 +990,13 @@ function renderLog() {
 
   var list = document.getElementById('logList');
   if (!entries.length) {
-    list.innerHTML = '<p style="color:#aaa;font-size:13px;text-align:center;padding:20px 0;">Ingen registreringer ennaa</p>';
+    list.innerHTML = '<p style="color:#aaa;font-size:13px;text-align:center;padding:20px 0;">Ingen registreringer ennå</p>';
     return;
   }
   list.innerHTML = entries.map(function(e, i) {
     var d = e.data;
     var title = [d.lokalitet, d.merd && ('Merd ' + d.merd), d.art].filter(Boolean).join(' · ') || 'Registrering';
-    var sub   = [d.snittvekt && (d.snittvekt + ' kg'), d.dod_fisk && (d.dod_fisk + ' doedfisk'), d.biolog].filter(Boolean).join(' · ');
+    var sub   = [d.snittvekt && (d.snittvekt + ' kg'), d.dod_fisk && (d.dod_fisk + ' dødfisk'), d.biolog].filter(Boolean).join(' · ');
     var time  = new Date(e.ts).toLocaleString('nb-NO', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
     return '<div class="log-item" onclick="openEntry(' + i + ')">'
       + '<div class="log-dot ' + e.status + '"></div>'
@@ -998,7 +1033,7 @@ function openEntry(idx) {
     { l: 'Art',         v: d.art },
     { l: 'Snittvekt',   v: d.snittvekt ? d.snittvekt + ' kg' : '' },
     { l: 'Ant. fisk',   v: d.antall },
-    { l: 'Doedfisk',    v: d.dod_fisk ? d.dod_fisk + (d.dod_pst ? ' (' + d.dod_pst + '%)' : '') : '' },
+    { l: 'Dødfisk',    v: d.dod_fisk ? d.dod_fisk + (d.dod_pst ? ' (' + d.dod_pst + '%)' : '') : '' },
     { l: 'Temp',        v: d.temp ? d.temp + ' C' : '' },
     { l: 'O2',          v: d.o2 ? d.o2 + ' mg/L' : '' },
     { l: 'Lus hv/bev/fas', v: [d.lus_hv, d.lus_bev, d.lus_fas].filter(Boolean).join(' / ') },
@@ -1037,7 +1072,7 @@ function saveEntryEdit() {
 
 function reanalyze() {
   var raw = document.getElementById('em-raw').value.trim();
-  if (!raw) { toast('Ingen tekst aa analysere'); return; }
+  if (!raw) { toast('Ingen tekst å analysere'); return; }
   if (!anthroKey) { openKeyModal(); return; }
   closeEntry();
   showLive(raw, '');
@@ -1064,18 +1099,18 @@ async function optimizeEntry() {
   var btn = document.getElementById('optBtn');
   btn.textContent = 'Analyserer...'; btn.disabled = true;
 
-  var sys = 'Du er en erfaren fiskehelsebiolog. Gjennomgaa feltregistreringen og gi en optimalisert analyse.\n\n'
-    + 'Gjor folgende:\n'
-    + '1. Fyll inn manglende felt basert paa klinisk kontekst\n'
-    + '2. Foresl aa differensialdiagnoser hvis ikke angitt\n'
+  var sys = 'Du er en erfaren fiskehelsebiolog. Gjennomgå feltregistreringen og gi en optimalisert analyse.\n\n'
+    + 'Gjør følgende:\n'
+    + '1. Fyll inn manglende felt basert på klinisk kontekst\n'
+    + '2. Foreslå differensialdiagnoser hvis ikke angitt\n'
     + '3. Skriv strukturert klinisk vurdering\n'
-    + '4. Foresl aa konkrete tiltak\n'
+    + '4. Foreslå konkrete tiltak\n'
     + '5. Korriger inkonsistenser\n'
-    + '6. Beregn doedelighet % hvis mulig\n'
+    + '6. Beregn dødelighet % hvis mulig\n'
     + '7. Vurder rapporteringsplikt\n\n'
-    + 'Svar paa norsk med klare seksjoner.';
+    + 'Svar på norsk med klare seksjoner.';
 
-  var body = 'Feltdata:\n' + JSON.stringify(e.data, null, 2) + (e.raw ? '\n\nRaa transkripsjon:\n' + e.raw : '');
+  var body = 'Feltdata:\n' + JSON.stringify(e.data, null, 2) + (e.raw ? '\n\nRå transkripsjon:\n' + e.raw : '');
 
   try {
     var res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1100,7 +1135,7 @@ async function optimizeEntry() {
     el.className = 'opt-result show';
     btn.textContent = 'Optimalisert';
   } catch(err) {
-    btn.textContent = 'Feil -- proev igjen';
+    btn.textContent = 'Feil — prøv igjen';
     btn.disabled = false;
     toast('Feil: ' + err.message.slice(0, 50));
   }
@@ -1110,10 +1145,10 @@ async function optimizeEntry() {
 // EXPORT
 // ============================================================
 var EXP = {
-  vi:  { k1: 'Vekt',               k2: 'Antall doede', fmt: 'PDF -- Veterinaerinstituttet', btn: 'Send til Veterinaerinstituttet' },
-  pat: { k1: 'Biomasse-indikator', k2: 'Mortality',    fmt: 'API -- Patogen AS',            btn: 'Send via Patogen API' },
-  phq: { k1: 'Weight (kg)',        k2: 'Loss',          fmt: 'JSON -- PHARMAQ',              btn: 'Eksporter til PHARMAQ' },
-  ba:  { k1: 'avg_weight',         k2: 'dead_count',    fmt: 'API -- Blue Analytics',        btn: 'Send til Blue Analytics' }
+  vi:  { k1: 'Vekt',               k2: 'Antall døde', fmt: 'PDF -- Veterinærinstituttet', btn: 'Send til Veterinærinstituttet' },
+  pat: { k1: 'Biomasse-indikator', k2: 'Mortality',    fmt: 'API — Patogen AS',            btn: 'Send via Patogen API' },
+  phq: { k1: 'Weight (kg)',        k2: 'Loss',          fmt: 'JSON — PHARMAQ',              btn: 'Eksporter til PHARMAQ' },
+  ba:  { k1: 'avg_weight',         k2: 'dead_count',    fmt: 'API — Blue Analytics',        btn: 'Send til Blue Analytics' }
 };
 
 function pickExp(key, el) {
@@ -1161,7 +1196,7 @@ function learnWord() {
   document.getElementById('cv-wrong').value = '';
   document.getElementById('cv-right').value = '';
   renderCorrections();
-  toast('Husket: "' + wrong + '" er naa "' + correct + '"');
+  toast('Husket: "' + wrong + '"" → "' + correct + '"');
 }
 
 function renderCorrections() {
@@ -1206,7 +1241,7 @@ function saveKeys() {
   closeKeyModal();
   updateKeyBtn();
   detectEngine();
-  toast('Noekler lagret');
+  toast('Nøkler lagret');
 }
 function updateKeyBtn() {
   var el = document.getElementById('keyBtn');
